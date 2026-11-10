@@ -1,0 +1,7 @@
+/* Frost theme: an ice cavern. A six-armed frost lattice, icicles, a frozen pool, small warm embers as counter-light.
+   Pair with themes/frost.js for the art. Applies to :root when loaded, or to any element with data-theme="frost". */
+:root, [data-theme="frost"]{
+  --accent:#4bc6e9; --accent-hot:#bdf0ff; --accent-deep:#17607a; --accent-halo:rgba(75,198,233,.5); --title-shadow:#0b2a3a;
+  --glow-1:#8fe3f7; --glow-2:#e6fbff; --glow-3:#ffd36b;
+  --tint-accent:#eef7fb;
+}

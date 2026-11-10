@@ -1,0 +1,389 @@
+<title>NixOS Frost Field Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Silkscreen&family=VT323&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: landscape A4 sheets, two columns per sheet, Ember Cave tokens with a frost palette for NixOS */
+:root{
+  --void:#0b0714; --cave:#170d24; --rock:#3b2a3f; --ember:#ff8a2a; --ember-hot:#ffd36b; --ember-dim:#b24d0a; --acid:#7cf36b; --frost:#4bc6e9; --hexlit:#ffb8f4;
+  --paper:#ffffff; --ink:#1c1226; --ink-soft:#5b4a63; --rule:#d9d0de; --tint:#f4eff6; --tint-ember:#fff1e4; --violet:#6b2b8f;
+  --tint-frost:#eef7fb; --frost-ink:#17607a; --tint-acid:#eefae9; --acid-ink:#2a6b33; --tint-warn:#fff7dc; --warn-ink:#8a5200; --err:#b3261e;
+  --display:"Pixelify Sans","Silkscreen",monospace; --label:"Silkscreen","Pixelify Sans",monospace;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif; --code:"VT323","Courier New",monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:#e9def0;font-family:var(--body);margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ---------- screen wrapper ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+.hd{display:flex;flex-direction:column;gap:10px}
+.hd .k{font-family:var(--label);font-size:12px;letter-spacing:.24em;color:var(--frost);text-transform:uppercase}
+.hd h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1;margin:0;color:var(--ember-hot);text-shadow:3px 3px 0 #3a1206}
+.hd p{max-width:68ch;margin:0;line-height:1.55;font-size:16px;color:#cdbfd6}
+.cap{font-family:var(--label);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember);margin:0 0 8px;display:flex;gap:12px;flex-wrap:wrap}
+.cap span{color:#9f8bb0}
+.sheet{width:100%;aspect-ratio:297/210;position:relative;overflow:hidden;box-shadow:8px 8px 0 #000;background:#fff}
+.sheet > .page{position:absolute;left:0;top:0;transform-origin:0 0;transform:scale(var(--k,1))}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.note{background:var(--cave);padding:16px 18px;box-shadow:6px 6px 0 #000;line-height:1.5;font-size:15px;min-width:0}
+.note b{display:block;font-family:var(--label);font-weight:400;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--frost);margin-bottom:6px}
+.outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.op{background:var(--cave);padding:18px 20px;box-shadow:6px 6px 0 #000;min-width:0}
+.op h3{font-family:var(--display);font-size:22px;margin:4px 0 10px;color:#fff;line-height:1.1}
+.op .pk{font-family:var(--label);font-size:11px;letter-spacing:.18em;color:var(--ember);text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.op .pk i{font-style:normal;color:#9f8bb0}
+.op ol{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.op li{font-size:14.5px;line-height:1.45;color:#cdbfd6;display:grid;grid-template-columns:30px 1fr;gap:6px}
+.op li::before{content:attr(data-n);font-family:var(--code);font-size:19px;color:var(--ember-hot);line-height:1}
+.op li strong{color:#fff;font-weight:600}
+h2.sec{font-family:var(--display);font-size:30px;margin:12px 0 0;color:#fff}
+
+/* ---------- print pages ---------- */
+.page{width:297mm;height:210mm;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:9.3pt;line-height:1.45;position:relative;overflow:hidden}
+.inner{position:absolute;left:14mm;right:14mm;top:12mm;bottom:15mm}
+.cols{column-count:2;column-gap:10mm;column-rule:.7pt dotted #cbbfd2;column-fill:auto;height:100%}
+.folio{position:absolute;left:14mm;right:14mm;bottom:6.5mm;display:flex;justify-content:space-between;font-family:var(--label);font-size:6.3pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.folio b{font-weight:400;color:var(--ember-dim)}
+.cols p{margin:0 0 2.2mm}
+.cols ul,.cols ol{margin:0 0 2.4mm;padding-left:5mm}
+.cols li{margin:0 0 .8mm}
+h3.chap{font-family:var(--display);font-weight:700;font-size:14.5pt;line-height:1.1;margin:0 0 3mm;display:flex;gap:2.6mm;align-items:flex-start;break-after:avoid;text-wrap:balance}
+h3.chap::before{content:"";flex:0 0 3mm;height:3mm;margin-top:1.6mm;background:var(--ember);box-shadow:1.2pt 1.2pt 0 var(--ink),2.4pt 2.4pt 0 var(--ink)}
+h3.chap small{display:block;font-family:var(--label);font-weight:400;font-size:6.5pt;letter-spacing:.16em;color:var(--ember-dim);margin-bottom:1mm}
+h4{font-family:var(--display);font-weight:600;font-size:10.6pt;margin:3mm 0 1.4mm;break-after:avoid}
+code{font-family:var(--code);font-size:1.2em;background:var(--tint);padding:0 .7mm;line-height:1}
+pre{font-family:var(--code);font-size:10.8pt;line-height:1.06;margin:0 0 2.8mm;white-space:pre-wrap;break-inside:avoid}
+pre.nix,pre.sh{background:var(--ink);color:#f3e9f7;padding:2.6mm 3.4mm}
+pre .c{color:#9f8bb0} pre .k{color:var(--ember-hot)} pre .n{color:var(--acid)} pre .l{color:var(--acid)} pre .s{color:var(--frost)} pre .t{color:var(--hexlit)} pre .a{color:#bdf0ff}
+pre.sh .p{color:var(--ember)} pre.sh .o{color:#bfb0c9}
+.px{clip-path:polygon(0 1.4mm,1.4mm 1.4mm,1.4mm 0,calc(100% - 1.4mm) 0,calc(100% - 1.4mm) 1.4mm,100% 1.4mm,100% calc(100% - 1.4mm),calc(100% - 1.4mm) calc(100% - 1.4mm),calc(100% - 1.4mm) 100%,1.4mm 100%,1.4mm calc(100% - 1.4mm),0 calc(100% - 1.4mm))}
+.box{padding:2.8mm 3.6mm 2.2mm;margin:0 0 3mm;break-inside:avoid}
+.box > :last-child{margin-bottom:0}
+.box p{margin:0 0 1.6mm}
+.tag{font-family:var(--label);font-size:6.5pt;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:1.8mm;margin-bottom:1.6mm}
+.tag canvas{width:3.6mm;height:3.6mm;image-rendering:pixelated}
+.worked{background:var(--tint-ember)} .worked .tag{color:var(--ember-dim)}
+.exer{background:var(--tint)} .exer .tag{color:var(--violet)}
+.tip{background:var(--tint-acid)} .tip .tag{color:var(--acid-ink)}
+.pit{background:var(--tint-warn)} .pit .tag{color:var(--warn-ink)}
+.term{background:var(--tint-frost)} .term .tag{color:var(--frost-ink)}
+.term pre{color:var(--ink);font-size:10.2pt;margin-bottom:1.4mm}
+.term pre .e{color:var(--err)} .term pre .g{color:var(--frost-ink)}
+.ans{font-size:8.3pt;color:var(--ink-soft);border-top:.8pt dashed #c7b9cf;padding-top:1.6mm;margin-top:1mm !important}
+.ans em{font-style:normal;font-family:var(--label);font-size:6.3pt;letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+table.t{border-collapse:collapse;width:100%;font-size:8.2pt;line-height:1.3;margin:0 0 3mm;break-inside:avoid}
+table.t th{font-family:var(--label);font-weight:400;font-size:6.2pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:var(--ink);color:#fff;padding:1.3mm 1.8mm}
+table.t td{color:var(--ink);padding:1mm 1.8mm;border-bottom:.6pt solid var(--rule);vertical-align:top}
+table.t td:first-child{font-family:var(--code);font-size:10.4pt;line-height:1}
+.box table.t{background:#fff}
+.case{display:flex;align-items:baseline;gap:2mm;font-family:var(--display);font-weight:600;font-size:10.6pt;margin:0 0 1.6mm;break-after:avoid}
+.case b{font-family:var(--label);font-weight:400;font-size:6.5pt;letter-spacing:.12em;color:#fff;background:var(--ember-dim);padding:.6mm 1.6mm}
+.lbl{font-family:var(--label);font-size:6.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .8mm}
+
+/* cover */
+.cov{background:var(--void)}
+.cov canvas.art{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.cov .ttl{position:absolute;left:17mm;top:19mm;width:132mm;display:flex;flex-direction:column;gap:4mm}
+.kicker{font-family:var(--label);font-size:8.2pt;letter-spacing:.3em;color:var(--ember);text-transform:uppercase;text-shadow:.6pt .6pt 0 #000}
+.cov h1{font-family:var(--display);font-weight:700;margin:0;line-height:.86;font-size:104pt;color:#d9f6ff;text-shadow:3pt 3pt 0 #0d2a44,0 0 16pt rgba(75,198,233,.55)}
+.cov h1 span{display:block;font-size:38pt;line-height:1.05;color:var(--ember-hot);text-shadow:2pt 2pt 0 #3a1206;letter-spacing:.02em;margin-top:2mm}
+.cov .sub{font-family:var(--code);font-size:17pt;color:#e9def0;line-height:1;text-shadow:1.2pt 1.2pt 0 #000}
+.cov .sub i{font-style:normal;color:var(--frost)}
+.cov .foot{position:absolute;left:17mm;bottom:33mm;font-family:var(--label);font-size:7.2pt;letter-spacing:.22em;color:#bdf0ff;text-shadow:1pt 1pt 0 #000;text-transform:uppercase}
+.cov .blurb{font-size:10pt;line-height:1.5;color:#e9def0;max-width:112mm;text-shadow:1pt 1pt 0 #000;margin:0}
+
+/* opener header on a content page */
+.band{position:absolute;left:0;right:0;top:0;height:38.5mm}
+.band canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.ophd{position:absolute;left:14mm;right:14mm;top:44mm;display:grid;grid-template-columns:1fr 1fr;column-gap:10mm;align-items:start}
+.partno{font-family:var(--label);font-size:7.4pt;letter-spacing:.2em;color:var(--ember);text-transform:uppercase;margin-bottom:2mm}
+.chap-h{font-family:var(--display);font-weight:700;font-size:25pt;line-height:1;margin:0 0 2.6mm;text-wrap:balance}
+.lead{font-size:10pt;line-height:1.45;font-weight:600;margin:0}
+.toc{display:flex;flex-direction:column;gap:1.7mm;padding-top:1mm}
+.toc div{display:flex;gap:3mm;align-items:baseline;font-size:9pt}
+.toc b{font-family:var(--label);font-weight:400;font-size:6.8pt;color:var(--ember);min-width:10mm;letter-spacing:.08em}
+.toc i{flex:1;font-style:normal;border-bottom:.8pt dotted #b9aac2;padding-bottom:.4mm}
+.toc span{font-family:var(--code);font-size:11pt;color:var(--ink-soft);min-width:6mm;text-align:right}
+.below{top:92mm}
+
+/* contents page */
+.ct .c-part{display:flex;gap:3mm;align-items:baseline;margin:2.6mm 0 1.2mm;break-after:avoid}
+.ct .c-part b{font-family:var(--label);font-weight:400;font-size:6.8pt;color:var(--ink);min-width:12mm}
+.ct .c-part i{flex:1;font-style:normal;font-family:var(--display);font-weight:600;font-size:10.4pt;border-bottom:1pt solid var(--ink)}
+.ct .c-part span,.ct .c-ch span{font-family:var(--code);font-size:11pt;color:var(--ink-soft)}
+.ct .c-ch{display:flex;gap:3mm;align-items:baseline;font-size:8.6pt;margin:0 0 .9mm}
+.ct .c-ch b{font-family:var(--label);font-weight:400;font-size:6.5pt;color:var(--ember);min-width:12mm;padding-left:3mm}
+.ct .c-ch i{flex:1;font-style:normal;border-bottom:.7pt dotted #b9aac2}
+.bigh{font-family:var(--display);font-weight:700;font-size:21pt;line-height:1;margin:0 0 3mm}
+
+@media print{
+  @page{size:A4 landscape;margin:0}
+  body{background:#fff}
+  .wrap{display:block;padding:0;max-width:none}
+  .hd,.notes,.outline,h2.sec,.cap{display:none}
+  .sheet{aspect-ratio:auto;box-shadow:none;overflow:visible;width:297mm;height:210mm;break-after:page}
+  .sheet > .page{position:relative;transform:none}
+}
+</style>
+
+<div class="wrap">
+  <header class="hd">
+    <div class="k">Design preview · for your approval</div>
+    <h1>NixOS: The Frost Field Book</h1>
+    <p>Five sample sheets in the Ember Cave style, printed landscape A4 with two columns per sheet, the same layout as the Rust book. Below them is the full topic outline. Nothing else is written yet; once you approve the look and the topics, I build the full PDF. If you would rather have portrait A4 with one column, like the reverse engineering book, just say so.</p>
+  </header>
+
+  <!-- ===== 1. COVER ===== -->
+  <div>
+    <p class="cap">Sheet 1 · Front cover <span>New ice cavern scene, seed 2605</span></p>
+    <div class="sheet"><div class="page cov">
+      <canvas class="art" data-frost="cover" data-seed="2605" width="1360" height="960"></canvas>
+      <div class="ttl">
+        <div class="kicker">A field book for systems you can rebuild</div>
+        <h1>NIXOS<span>THE DECLARATIVE MANUAL</span></h1>
+        <div class="sub">declare <i>&gt;</i> build <i>&gt;</i> switch <i>&gt;</i> roll back</div>
+      </div>
+      <div class="foot">Study on paper · 5 parts · 19 chapters · flakes in depth</div>
+    </div></div>
+  </div>
+
+  <!-- ===== 2. CONTENTS + START ===== -->
+  <div>
+    <p class="cap">Sheet 2 · Contents and how to use the book <span>Two columns, one sheet</span></p>
+    <div class="sheet"><div class="page">
+      <div class="inner"><div class="cols ct">
+        <div class="partno">Contents</div>
+        <h2 class="bigh">What is inside</h2>
+        <div class="c-part"><b>Start</b><i>How to study Nix on paper</i><span>3</span></div>
+        <div class="c-part"><b>Part 1</b><i>The Nix idea</i><span>4</span></div>
+        <div class="c-ch"><b>1</b><i>Nix, Nixpkgs and NixOS: the store model</i><span>4</span></div>
+        <div class="c-ch"><b>2</b><i>The Nix language in eight pages of code</i><span>5</span></div>
+        <div class="c-ch"><b>3</b><i>Derivations, closures and caches</i><span>7</span></div>
+        <div class="c-part"><b>Part 2</b><i>Running NixOS</i><span>8</span></div>
+        <div class="c-ch"><b>4</b><i>Installing and your first configuration.nix</i><span>8</span></div>
+        <div class="c-ch"><b>5</b><i>The module system</i><span>9</span></div>
+        <div class="c-ch"><b>6</b><i>Everyday configuration</i><span>11</span></div>
+        <div class="c-ch"><b>7</b><i>Rebuilds, generations and rollback</i><span>12</span></div>
+        <div class="c-part"><b>Part 3</b><i>Flakes</i><span>13</span></div>
+        <div class="c-ch"><b>8</b><i>Why flakes exist</i><span>13</span></div>
+        <div class="c-ch"><b>9</b><i>Anatomy of a flake</i><span>14</span></div>
+        <div class="c-ch"><b>10</b><i>Your machines as a flake</i><span>15</span></div>
+        <div class="c-ch"><b>11</b><i>Dev shells and per-project tools</i><span>16</span></div>
+        <div class="c-ch"><b>12</b><i>Locking, updating and flake patterns</i><span>17</span></div>
+        <div class="c-part"><b>Part 4</b><i>Packages and beyond</i><span>18</span></div>
+        <div class="c-ch"><b>13</b><i>Writing packages</i><span>18</span></div>
+        <div class="c-ch"><b>14</b><i>Overrides and overlays</i><span>20</span></div>
+        <div class="c-ch"><b>15</b><i>Home Manager</i><span>21</span></div>
+        <div class="c-ch"><b>16</b><i>Secrets, VMs, containers and remote deploys</i><span>22</span></div>
+        <div class="c-part"><b>Part 5</b><i>Workshop</i><span>23</span></div>
+        <div class="c-ch"><b>17</b><i>Troubleshooting clinic</i><span>23</span></div>
+        <div class="c-ch"><b>18</b><i>Recipe book: whole configs</i><span>25</span></div>
+        <div class="c-ch"><b>19</b><i>The exercise set</i><span>27</span></div>
+        <div class="c-part"><b>Back</b><i>Cheat sheets and glossary</i><span>28</span></div>
+
+        <h3 class="chap" style="margin-top:4mm"><span><small>Start here</small>How to study Nix on paper</span></h3>
+        <p>Nix looks strange until one idea clicks: <strong>a package is the output of a pure function</strong>, and its path in the store is a hash of every input that went into it. Same inputs, same path. Change anything, and you get a new path beside the old one. NixOS applies that idea to the whole operating system.</p>
+<pre class="sh px">$ readlink $(which git)
+/nix/store/9lsj6cx2vq2a1f0wb3kz8r5mhd4y7inp-git-2.47.1/bin/git
+           <span class="c">^ hash of all inputs  ^ name-version</span></pre>
+        <h4>The three questions</h4>
+        <p>Ask these of every snippet in the book. Most confusion in Nix comes from losing track of one of them.</p>
+        <ol>
+          <li><strong>Is this the language, a package, or a NixOS option?</strong> They look alike but live in different worlds.</li>
+          <li><strong>What does this expression evaluate to?</strong> Write the value in the margin.</li>
+          <li><strong>What ends up in the store, and who refers to it?</strong></li>
+        </ol>
+        <div class="box tip px"><div class="tag"><canvas data-ember="icon" data-icon="key" data-color="#2a6b33" width="7" height="7"></canvas>Tip</div>
+          <p>Keep a notebook page called <strong>Option diary</strong>. Each time a chapter sets an option like <code>services.openssh.enable</code>, write its full name and type. By Part 5 you will have your own map of the options you use most.</p></div>
+        <h4>The box types</h4>
+        <p><strong>Worked</strong> boxes evaluate code step by step. <strong>Terminal</strong> boxes print real command output. <strong>Tip</strong> and <strong>Pitfall</strong> boxes are habits worth keeping. <strong>Exercises</strong> end each chapter, with answers under the dashed line: cover them with a card until you have tried.</p>
+      </div></div>
+      <div class="folio"><span><b>NixOS</b> · Contents</span><span>2</span></div>
+    </div></div>
+  </div>
+
+  <!-- ===== 3. PART OPENER: FLAKES ===== -->
+  <div>
+    <p class="cap">Sheet 3 · Part opener with the chapter starting below it <span>The band replaces a full opener page, which saves a sheet per part</span></p>
+    <div class="sheet"><div class="page">
+      <div class="band"><canvas data-frost="band" data-seed="13" data-accent="#ff8a2a" width="1360" height="176"></canvas></div>
+      <div class="ophd">
+        <div>
+          <div class="partno">Part 3</div>
+          <h2 class="chap-h">Flakes</h2>
+          <p class="lead">A flake is a folder with a flake.nix that names its inputs exactly and lists what it offers. Lock the inputs and the same flake builds the same thing on any machine, today or in five years.</p>
+        </div>
+        <div class="toc">
+          <div><b>Ch 8</b><i>Why flakes exist</i><span>13</span></div>
+          <div><b>Ch 9</b><i>Anatomy of a flake</i><span>14</span></div>
+          <div><b>Ch 10</b><i>Your machines as a flake</i><span>15</span></div>
+          <div><b>Ch 11</b><i>Dev shells and per-project tools</i><span>16</span></div>
+          <div><b>Ch 12</b><i>Locking, updating and flake patterns</i><span>17</span></div>
+        </div>
+      </div>
+      <div class="inner below"><div class="cols">
+        <h3 class="chap"><span><small>Chapter 9</small>Anatomy of a flake</span></h3>
+        <p>A <code>flake.nix</code> is one attribute set with three keys: a <strong>description</strong>, the <strong>inputs</strong> it depends on, and <strong>outputs</strong>, a function that gets the fetched inputs and returns all the flake provides.</p>
+<pre class="nix px">{
+  description = "My machines and tools";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+  outputs = { self, nixpkgs, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}.default = pkgs.hello;
+      devShells.${system}.default = pkgs.mkShell {
+        packages = [ pkgs.go pkgs.gopls ];
+      };
+      nixosConfigurations.frost = nixpkgs.lib.nixosSystem {
+        modules = [ ./hosts/frost/configuration.nix ];
+      };
+    };
+}</pre>
+        <div class="box worked px"><div class="tag"><canvas data-ember="icon" data-icon="gear" data-color="#b24d0a" width="7" height="7"></canvas>Worked: which command reads which output</div>
+          <table class="t"><tr><th>Output</th><th>Read by</th></tr>
+            <tr><td>packages.&lt;sys&gt;.&lt;name&gt;</td><td><code>nix build .#name</code></td></tr>
+            <tr><td>devShells.&lt;sys&gt;.default</td><td><code>nix develop</code></td></tr>
+            <tr><td>apps.&lt;sys&gt;.&lt;name&gt;</td><td><code>nix run .#name</code></td></tr>
+            <tr><td>nixosConfigurations.&lt;host&gt;</td><td><code>nixos-rebuild switch --flake .#host</code></td></tr>
+            <tr><td>checks.&lt;sys&gt;.&lt;name&gt;</td><td><code>nix flake check</code></td></tr>
+</table>
+          <p><code>.#name</code> means "this folder's flake, output <code>name</code>". With no name, Nix looks for <code>default</code>. The first build writes <code>flake.lock</code>, which pins every input to one commit; commit it too.</p></div>
+        <div class="box pit px"><div class="tag"><canvas data-ember="icon" data-icon="warn" data-color="#8a5200" width="7" height="7"></canvas>Pitfall: the flake only sees files Git knows</div>
+<p>You add <code>hosts/frost/configuration.nix</code>, rebuild, and get <code>error: getting status of '/nix/store/…-source/hosts/frost/configuration.nix': No such file or directory</code>. In a Git repo, Nix copies only tracked files into the store. Run <code>git add</code> on the file; you do not need to commit.</p></div>
+      </div></div>
+      <div class="folio"><span><b>Part 3</b> · Flakes</span><span>14</span></div>
+    </div></div>
+  </div>
+
+  <!-- ===== 4. WORKSHOP ===== -->
+  <div>
+    <p class="cap">Sheet 4 · Workshop <span>Case cards: symptom, broken code, diagnosis, fix, then whole-config recipes</span></p>
+    <div class="sheet"><div class="page">
+      <div class="inner"><div class="cols">
+        <h3 class="chap"><span><small>Chapter 17</small>Troubleshooting clinic</span></h3>
+        <p>Each case is an error almost every NixOS user meets in their first months. Read the code, predict the message, then compare your fix with the one given.</p>
+        <div class="case"><b>Case 2</b>infinite recursion encountered</div>
+<pre class="nix px">{ config, lib, ... }: {
+  imports = if config.services.nginx.enable
+            then [ ./web.nix ] else [ ];
+}</pre>
+        <p class="lbl">Diagnosis</p>
+        <p>To know <code>config</code>, NixOS must first collect every module, and that means reading <code>imports</code>. But here <code>imports</code> needs <code>config</code>. Neither can be computed first.</p>
+        <p class="lbl">Fix: always import, decide inside</p>
+<pre class="nix px"># web.nix
+{ config, lib, ... }: lib.mkIf config.services.nginx.enable {
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+}</pre>
+        <div class="case"><b>Case 3</b>hash mismatch in a fetcher</div>
+        <div class="box term px"><div class="tag"><canvas data-ember="icon" data-icon="chip" data-color="#17607a" width="7" height="7"></canvas>Terminal</div>
+<pre><span class="e">error: hash mismatch in fixed-output derivation</span>
+         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            got:    sha256-p3Kq0bJ1dZ6mYwq8xv2sJ0hTt9nF4cL7aE5uR1iWzGk=</pre>
+          <p>The usual trick when writing a fetcher: put <code>hash = lib.fakeHash;</code>, build once, then paste the <strong>got</strong> value in. If the hash breaks later, the source really changed upstream.</p></div>
+        <div class="case"><b>Case 4</b>a downloaded binary will not start</div>
+<pre class="sh px">$ ./tool
+<span class="e">Could not start dynamically linked executable: ./tool</span>
+<span class="o">NixOS cannot run dynamically linked executables intended
+for generic linux environments out of the box.</span></pre>
+        <p>There is no <code>/lib64/ld-linux-x86-64.so.2</code> on NixOS. Best fix: package it with <code>autoPatchelfHook</code> (Chapter 13). Quick fix: <code>programs.nix-ld.enable = true;</code></p>
+
+        <h3 class="chap" style="margin-top:3mm"><span><small>Chapter 18</small>Recipe book: whole configs</span></h3>
+        <div class="box worked px"><div class="tag"><canvas data-ember="icon" data-icon="gear" data-color="#b24d0a" width="7" height="7"></canvas>Recipe 4: a website with HTTPS in 14 lines</div>
+<pre class="nix px">services.nginx = {
+  enable = true;
+  recommendedTlsSettings = true;
+  virtualHosts."notes.example.org" = {
+    enableACME = true;   # get a certificate
+    forceSSL = true;     # redirect http to https
+    root = "/var/www/notes";
+  };
+};
+security.acme = {
+  acceptTerms = true;
+  defaults.email = "admin@example.org";
+};
+networking.firewall.allowedTCPPorts = [ 80 443 ];</pre>
+          <p>One rebuild installs nginx, writes its config, creates a systemd timer that renews the certificate and opens the firewall. Delete the block and rebuild, and all of it is gone again.</p></div>
+        <div class="box exer px"><div class="tag"><canvas data-ember="icon" data-icon="q" data-color="#6b2b8f" width="7" height="7"></canvas>Problem 18.2</div>
+          <p>Module A sets <code>services.openssh.enable = lib.mkDefault false;</code> and module B sets <code>services.openssh.enable = true;</code>. Is SSH on? What if B used <code>lib.mkForce false</code> and a third module set <code>true</code>?</p>
+          <p class="ans"><em>Answer</em> On. A plain value has priority 100 and beats <code>mkDefault</code> (1000); lower numbers win. With <code>mkForce</code> (50) in B, SSH is off: 50 beats the third module's 100.</p></div>
+      </div></div>
+      <div class="folio"><span><b>Part 5</b> · Workshop</span><span>24</span></div>
+    </div></div>
+  </div>
+
+  <!-- ===== 5. BACK COVER ===== -->
+  <div>
+    <p class="cap">Sheet 5 · Back cover <span>Same cavern, different seed</span></p>
+    <div class="sheet"><div class="page cov">
+      <canvas class="art" data-frost="cover" data-seed="1103" width="1360" height="960"></canvas>
+      <div class="ttl">
+        <div class="kicker">The end of the book, the start of your config</div>
+        <div class="sub">If it builds, switch. <i>If it breaks, roll back.</i></div>
+        <p class="blurb">Nineteen chapters on the parts of Nix and NixOS that matter: the store, the language, the module system, everyday configuration, a full part on flakes, packaging, overlays, Home Manager, and a workshop of real errors, whole-config recipes and exercises with answers. Made to be printed and studied with a pencil.</p>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="notes">
+    <div class="note"><b>What stays the same</b>The Ember Cave look of the other books: pixel fonts for titles and labels, Plex Sans for reading, VT323 for code, dark art only on covers and part bands, white interiors that print cheaply.</div>
+    <div class="note"><b>What is new</b>An ice cavern cover: a glowing six-armed frost lattice, icicles, a frozen pool, and warm embers shaped like Nix symbols ( λ { } = ; : ). The title glows cold instead of hot. A Terminal box for command output, and code colored for Nix.</div>
+    <div class="note"><b>Layout: your choice</b>Landscape A4, two columns, 9.3 pt text, like the Rust book. Part openers are a band on a working page. About 29 sheets in total. Prefer portrait A4 with one column like the RE book? Say so and I will switch.</div>
+  </div>
+
+  <h2 class="sec">Topic outline</h2>
+  <div class="outline">
+    <div class="op"><div class="pk">Start here <i>1 sheet</i></div><h3>How to study Nix on paper</h3><ol>
+      <li data-n="·"><span><strong>The one idea.</strong> Store paths as hashes of inputs, the three questions, keeping an option diary.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 1 <i>4 sheets</i></div><h3>The Nix idea</h3><ol>
+      <li data-n="1"><span><strong>Nix, Nixpkgs and NixOS.</strong> The package manager, the package collection and the OS; /nix/store, purity, why upgrades are atomic, profiles and generations.</span></li>
+      <li data-n="2"><span><strong>The Nix language.</strong> Types, attribute sets, let and in, with, inherit, rec, functions and argument sets, lists, string interpolation, paths, import, builtins and lib. Every rule with a worked evaluation.</span></li>
+      <li data-n="3"><span><strong>Derivations, closures and caches.</strong> What a .drv is, build vs runtime dependencies, closures, binary caches and substituters, garbage collection.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 2 <i>5 sheets</i></div><h3>Running NixOS</h3><ol>
+      <li data-n="4"><span><strong>Installing and your first config.</strong> Partitioning, nixos-generate-config, hardware-configuration.nix, a line-by-line reading of configuration.nix.</span></li>
+      <li data-n="5"><span><strong>The module system.</strong> Options and config, imports, option types, mkIf, mkMerge, mkDefault and mkForce priorities, writing your own module with options.</span></li>
+      <li data-n="6"><span><strong>Everyday configuration.</strong> Users, packages, services and systemd units, networking and firewall, boot loader, file systems, desktops, sound, printing, unfree software.</span></li>
+      <li data-n="7"><span><strong>Rebuilds, generations and rollback.</strong> switch, boot, test and build-vm; booting old generations; upgrades, channels vs flakes; cleaning the store safely.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 3 <i>5 sheets</i></div><h3>Flakes</h3><ol>
+      <li data-n="8"><span><strong>Why flakes exist.</strong> The problems with channels and NIX_PATH, pure evaluation, turning flakes on, the new nix command.</span></li>
+      <li data-n="9"><span><strong>Anatomy of a flake.</strong> inputs and URL types, follows, the outputs schema, systems, .#name references, flake.lock explained line by line.</span></li>
+      <li data-n="10"><span><strong>Your machines as a flake.</strong> A multi-host repo layout, nixosSystem, specialArgs, shared modules, Home Manager as a module, deploying a host from another machine.</span></li>
+      <li data-n="11"><span><strong>Dev shells and per-project tools.</strong> mkShell, nix develop, nix shell and nix run, direnv with use flake, shells for Go, Python, Rust and Node projects.</span></li>
+      <li data-n="12"><span><strong>Locking, updating and flake patterns.</strong> Updating one input, pinning a commit, mixing stable and unstable, templates, flake-utils and flake-parts, nix flake check.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 4 <i>5 sheets</i></div><h3>Packages and beyond</h3><ol>
+      <li data-n="13"><span><strong>Writing packages.</strong> stdenv.mkDerivation and its phases, fetchers and hashes, callPackage, language builders (Go, Rust, Python), wrapping a prebuilt binary.</span></li>
+      <li data-n="14"><span><strong>Overrides and overlays.</strong> override vs overrideAttrs, patching a package, writing an overlay, using it in a flake.</span></li>
+      <li data-n="15"><span><strong>Home Manager.</strong> Dotfiles as code, programs.* options, standalone vs NixOS module.</span></li>
+      <li data-n="16"><span><strong>Secrets, VMs, containers, deploys.</strong> Why secrets must stay out of the store (sops-nix and agenix ideas), test VMs, NixOS containers, OCI images, nixos-rebuild --target-host.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 5 <i>5 sheets</i></div><h3>Workshop</h3><ol>
+      <li data-n="17"><span><strong>Troubleshooting clinic.</strong> 12 classic errors as case cards: infinite recursion, missing attribute, hash mismatch, untracked files, unfree refused, file collisions, dynamic binaries, read-only store, and more.</span></li>
+      <li data-n="18"><span><strong>Recipe book.</strong> Eight whole configs: laptop desktop, home server, web server with HTTPS, Docker and Podman host, PostgreSQL, gaming with Steam, a Wireguard VPN, a dev workstation.</span></li>
+      <li data-n="19"><span><strong>The exercise set.</strong> 25 graded problems, from "evaluate this expression" to "design this module", with full answers.</span></li></ol></div>
+    <div class="op"><div class="pk">Back <i>2 sheets</i></div><h3>Cheat sheets and glossary</h3><ol>
+      <li data-n="·"><span>Old vs new command map (nix-env, nix-shell and nix-build vs nix profile, nix develop and nix build), language cheat sheet, the lib functions you will use, option types, priorities, glossary.</span></li></ol></div>
+  </div>
+</div>
+
+<script src="../core/glowgrid.js"></script>
+<script src="../themes/frost.js"></script>
+<script>
+(function(){
+  const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const RX=/(#.*$)|("(?:[^"\\]|\\.)*"|''[\s\S]*?'')|(\.{0,2}\/[\w.\/-]+)|(\b(?:let|in|with|rec|inherit|import|if|then|else|assert|or|true|false|null)\b)|(\b(?:lib|pkgs|config|builtins|self|nixpkgs)\b)|(\b\d+\b)|(\b[a-zA-Z_][\w'-]*(?=(?:\.[\w${}"-]+)*\s*=[^=]))/gm;
+  const cls=["c","s","l","k","t","n","a"];
+  document.querySelectorAll("pre.nix").forEach(pre=>{
+    const src=pre.textContent; let out="",last=0;
+    src.replace(RX,(m,...g)=>{const off=g[g.length-2];out+=esc(src.slice(last,off));const i=g.slice(0,7).findIndex(x=>x!==undefined);out+=`<span class="${cls[i]}">${esc(m)}</span>`;last=off+m.length;return m;});
+    pre.innerHTML=out+esc(src.slice(last));
+  });
+  document.querySelectorAll("pre.sh").forEach(pre=>{
+    pre.innerHTML=pre.innerHTML.split("\n").map(l=>l.startsWith("$ ")?`<span class="p">$</span> ${l.slice(2)}`:l).join("\n");
+  });
+  Ember.frostInit();
+  const fit=()=>document.querySelectorAll(".sheet").forEach(s=>{const p=s.firstElementChild;s.style.setProperty("--k",s.clientWidth/p.offsetWidth);});
+  fit(); addEventListener("resize",fit);
+  document.fonts&&document.fonts.ready.then(()=>{fit();document.documentElement.dataset.ready="1";});
+})();
+</script>

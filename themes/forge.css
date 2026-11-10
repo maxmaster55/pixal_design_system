@@ -1,0 +1,7 @@
+/* Forge theme: a cave forge. A glowing cog over an anvil, a molten pool, cold frost shards as counter-light.
+   Pair with themes/forge.js for the art. Applies to :root when loaded, or to any element with data-theme="forge". */
+:root, [data-theme="forge"]{
+  --accent:#ff9a3c; --accent-hot:#ffc56a; --accent-deep:#c25a12; --accent-halo:rgba(255,154,60,.55); --title-shadow:#3a1206;
+  --glow-1:#ffe08a; --glow-2:#f07a22; --glow-3:#bdf0ff;
+  --tint-accent:#fff0e0;
+}

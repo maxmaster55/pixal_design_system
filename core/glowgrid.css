@@ -1,0 +1,101 @@
+/* Glowgrid core styles: tokens + components. Pixel art lit from within; hard pixels, soft light, hard shadows.
+   Load a theme from themes/*.css after this file (or set data-theme on <html>) to recolor everything. */
+:root{
+  color-scheme: dark;
+  /* ---- semantic tokens: themes override these (see themes/*.css). Defaults = ember theme ---- */
+  /* dark world (screens, covers) */
+  --bg:#0b0714;          /* deepest background */
+  --surface:#170d24;     /* cards and panels on dark */
+  --stone:#3b2a3f;       /* mid tone, dividers on dark */
+  --stone-lit:#8a5a5a;   /* surfaces near a light */
+  /* lights: emissive colors, use only for things that glow */
+  --accent:#ff8a2a;      /* primary light: labels, markers */
+  --accent-hot:#ffd36b;  /* titles on dark, hottest pixels */
+  --accent-deep:#b24d0a; /* accent on paper (tags, notes) */
+  --accent-halo:rgba(255,138,42,.55);
+  --title-shadow:#3a1206;
+  --glow-1:#7cf36b;      /* secondary light: pools, terminal text, success */
+  --glow-2:#e94bd6;      /* focal object */
+  --glow-3:#4bc6e9;      /* cold counter-light: kickers, links on dark */
+  /* paper (print interiors) */
+  --paper:#ffffff; --ink:#1c1226; --ink-soft:#5b4a63; --rule:#d9d0de; --tint:#f4eff6; --tint-accent:#fff1e4;
+  /* type */
+  --display:"Pixelify Sans", "Silkscreen", monospace;
+  --label:"Silkscreen", "Pixelify Sans", monospace;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --code:"VT323", "Courier New", monospace;
+  /* ---- legacy Ember Cave names, kept so older pages keep working ---- */
+  --void:var(--bg); --cave:var(--surface); --rock:var(--stone); --rock-lit:var(--stone-lit);
+  --ember:var(--accent); --ember-hot:var(--accent-hot); --ember-dim:var(--accent-deep); --tint-ember:var(--tint-accent);
+  --acid:var(--glow-1); --hex:var(--glow-2); --frost:var(--glow-3);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:#e9def0;font-family:var(--body);margin:0}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px;max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+header.sheet h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,48px);margin:0;letter-spacing:.02em;color:var(--accent-hot);text-wrap:balance}
+header.sheet p{max-width:65ch;color:#bfb0c9;line-height:1.55;margin:8px 0 0}
+.label{font-family:var(--label);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.row > figure{margin:0;display:flex;flex-direction:column;gap:10px;flex:1 1 340px;max-width:460px;min-width:0}
+figcaption{font-family:var(--label);font-size:11px;letter-spacing:.1em;color:#a493b0;text-transform:uppercase}
+
+/* ---------- page shell ---------- */
+.page{container-type:inline-size;aspect-ratio:210/297;width:100%;max-width:100%;position:relative;overflow:hidden;box-shadow:0 0 0 2px #000, 8px 8px 0 #000}
+.paper{background:var(--paper);color:var(--ink)}
+.pg-in{position:absolute;inset:0;padding:9cqw 9cqw 8cqw;display:flex;flex-direction:column;gap:2.4cqw}
+.folio{position:absolute;bottom:4cqw;left:9cqw;right:9cqw;display:flex;justify-content:space-between;font-family:var(--label);font-size:2cqw;letter-spacing:.12em;color:var(--ink-soft);text-transform:uppercase}
+
+/* ---------- cover ---------- */
+.cover canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.cover .ttl{position:absolute;left:0;right:0;top:9cqw;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2cqw;padding:0 6cqw}
+.cover .kicker{font-family:var(--label);font-size:2.6cqw;letter-spacing:.3em;color:var(--glow-3);text-transform:uppercase}
+.cover h2{font-family:var(--display);font-weight:700;margin:0;line-height:.92;font-size:12.5cqw;color:var(--accent-hot);text-shadow:.8cqw .8cqw 0 var(--title-shadow), 0 0 4cqw var(--accent-halo);letter-spacing:.01em}
+.cover h2 span{display:block;font-size:8.2cqw;color:#fff;text-shadow:.6cqw .6cqw 0 #2a1640}
+.cover .sub{font-family:var(--code);font-size:4.6cqw;color:#e9def0;line-height:1;text-shadow:.4cqw .4cqw 0 #000}
+.cover .foot{position:absolute;bottom:15cqw;left:0;right:0;text-align:center;font-family:var(--label);font-size:2.3cqw;letter-spacing:.22em;color:var(--glow-1);text-shadow:.3cqw .3cqw 0 #000;text-transform:uppercase}
+
+/* ---------- interior pieces ---------- */
+.band{height:24cqw;margin:-9cqw -9cqw 0;position:relative}
+.band canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.partno{font-family:var(--label);font-size:2.4cqw;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-top:3cqw}
+.chap-h{font-family:var(--display);font-weight:700;font-size:7.2cqw;line-height:1;margin:0;color:var(--ink);text-wrap:balance}
+.lead{font-size:3.1cqw;line-height:1.5;color:var(--ink);margin:0;font-weight:600}
+.pg-in p{font-size:2.65cqw;line-height:1.55;margin:0}
+h3.sec{font-family:var(--display);font-weight:600;font-size:3.8cqw;margin:1.2cqw 0 0;color:var(--ink);display:flex;align-items:center;gap:1.6cqw}
+h3.sec::before{content:"";width:2cqw;height:2cqw;background:var(--accent);box-shadow:.6cqw .6cqw 0 var(--ink)}
+.toc{display:flex;flex-direction:column;gap:1.2cqw;margin-top:1cqw}
+.toc div{display:flex;gap:2cqw;font-size:2.6cqw;align-items:baseline}
+.toc b{font-family:var(--label);font-weight:400;font-size:2.2cqw;color:var(--accent);min-width:9cqw}
+.toc i{flex:1;border-bottom:.35cqw dotted var(--rule);font-style:normal}
+code,.code{font-family:var(--code)}
+.pg-in code{font-size:1.25em;background:var(--tint);padding:0 .5cqw}
+/* stepped pixel corners */
+.px{clip-path:polygon(0 1.2cqw,1.2cqw 1.2cqw,1.2cqw 0,calc(100% - 1.2cqw) 0,calc(100% - 1.2cqw) 1.2cqw,100% 1.2cqw,100% calc(100% - 1.2cqw),calc(100% - 1.2cqw) calc(100% - 1.2cqw),calc(100% - 1.2cqw) 100%,1.2cqw 100%,1.2cqw calc(100% - 1.2cqw),0 calc(100% - 1.2cqw))}
+pre.code{margin:0;background:var(--ink);color:#f3e9f7;font-size:3.3cqw;line-height:1.05;padding:2.4cqw 3cqw;white-space:pre;overflow:hidden}
+pre.code .c{color:#9f8bb0} pre.code .k{color:var(--accent-hot)} pre.code .n{color:var(--glow-1)}
+.box{padding:2.6cqw 3cqw;display:flex;flex-direction:column;gap:1.2cqw}
+.box .tag{font-family:var(--label);font-size:2.1cqw;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:1.4cqw}
+.box .tag canvas{width:3.4cqw;height:3.4cqw;image-rendering:pixelated}
+.worked{background:var(--tint-accent)} .worked .tag{color:var(--accent-deep)}
+.exer{background:var(--tint)} .exer .tag{color:#6b2b8f}
+.box ol{margin:0;padding-left:4cqw;font-size:2.6cqw;line-height:1.5}
+.ans{font-size:2.35cqw;color:var(--ink-soft);border-top:.3cqw dashed var(--rule);padding-top:1cqw;margin:0}
+table.t{border-collapse:collapse;width:100%;font-size:2.4cqw}
+table.t th{font-family:var(--label);font-weight:400;font-size:2cqw;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:var(--ink);color:#fff;padding:1cqw 1.4cqw}
+table.t td{padding:.9cqw 1.4cqw;border-bottom:.3cqw solid var(--rule);vertical-align:top}
+table.t td:first-child{font-family:var(--code);font-size:3cqw;white-space:nowrap}
+.trace td{font-family:var(--code);font-size:3.6cqw;text-align:center;color:var(--ink)}
+.margin-note{font-family:var(--code);font-size:3cqw;color:var(--accent-deep);line-height:1}
+
+/* ---------- specimen ---------- */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.card{background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.sw div{display:flex;flex-direction:column;gap:4px;font-family:var(--label);font-size:10px;letter-spacing:.06em;color:#bfb0c9}
+.sw span{height:40px;box-shadow:3px 3px 0 #000}
+.ty1{font-family:var(--display);font-weight:700;font-size:34px;color:var(--accent-hot);line-height:1}
+.ty2{font-family:var(--label);font-size:13px;letter-spacing:.16em;color:var(--glow-3)}
+.ty3{font-family:var(--body);font-size:15px;line-height:1.55;color:#e9def0}
+.ty4{font-family:var(--code);font-size:22px;color:var(--glow-1);line-height:1}
+.rules{margin:0;padding-left:18px;color:#cdbfd6;line-height:1.6;font-size:14px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowgrid themes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Silkscreen&family=VT323&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="../core/glowgrid.css">
+<link rel="stylesheet" href="../themes/ember.css">
+<style>
+/* scope theme tokens per card; :root stays on the core defaults */
+[data-theme="forge"]{--accent:#ff9a3c;--accent-hot:#ffc56a;--accent-deep:#c25a12;--accent-halo:rgba(255,154,60,.55);--glow-1:#ffe08a;--glow-2:#f07a22;--glow-3:#bdf0ff;--tint-accent:#fff0e0}
+[data-theme="frost"]{--accent:#4bc6e9;--accent-hot:#bdf0ff;--accent-deep:#17607a;--accent-halo:rgba(75,198,233,.5);--title-shadow:#0b2a3a;--glow-1:#8fe3f7;--glow-2:#e6fbff;--glow-3:#ffd36b;--tint-accent:#eef7fb}
+.themes{display:grid;align-items:start;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px}
+.theme{background:var(--surface);box-shadow:8px 8px 0 #000;display:flex;flex-direction:column;min-width:0}
+.theme canvas{width:100%;image-rendering:pixelated;display:block}
+.theme .meta{padding:16px 18px 20px;display:flex;flex-direction:column;gap:10px}
+.theme h2{font-family:var(--display);font-weight:700;color:var(--accent-hot);margin:0;font-size:28px;text-shadow:3px 3px 0 var(--title-shadow),0 0 18px var(--accent-halo)}
+.theme p{margin:0;color:#cdbfd6;line-height:1.5;font-size:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chips span{width:28px;height:28px;box-shadow:2px 2px 0 #000}
+.theme code{font-family:var(--code);font-size:18px;color:var(--glow-1)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="sheet">
+    <div class="label">Glowgrid design system</div>
+    <h1>Themes</h1>
+    <p>One engine and one set of components, recolored and re-lit per theme. Every theme keeps the same rules: light comes from inside the scene, art pixels stay hard, only the glow is soft.</p>
+  </header>
+  <div class="themes">
+    <section class="theme" data-theme="ember">
+      <canvas data-glow="cover" data-theme="ember" data-seed="1337"></canvas>
+      <div class="meta"><h2>Ember</h2><p>Dark cavern, binary embers, magenta crystal, acid pool. The default.</p>
+        <div class="chips"><span style="background:var(--accent)"></span><span style="background:var(--accent-hot)"></span><span style="background:var(--glow-1)"></span><span style="background:var(--glow-2)"></span><span style="background:var(--glow-3)"></span></div>
+        <code>data-theme="ember"</code></div>
+    </section>
+    <section class="theme" data-theme="forge">
+      <canvas data-glow="cover" data-theme="forge" data-seed="1515"></canvas>
+      <div class="meta"><h2>Forge</h2><p>Glowing cog over an anvil, molten pool, frost shards for contrast.</p>
+        <div class="chips"><span style="background:var(--accent)"></span><span style="background:var(--accent-hot)"></span><span style="background:var(--glow-1)"></span><span style="background:var(--glow-2)"></span><span style="background:var(--glow-3)"></span></div>
+        <code>data-theme="forge"</code></div>
+    </section>
+    <section class="theme" data-theme="frost">
+      <canvas data-glow="cover" data-theme="frost" data-seed="2605"></canvas>
+      <div class="meta"><h2>Frost</h2><p>Ice cavern, frost lattice, icicles, frozen pool, small warm embers.</p>
+        <div class="chips"><span style="background:var(--accent)"></span><span style="background:var(--accent-hot)"></span><span style="background:var(--glow-1)"></span><span style="background:var(--glow-2)"></span><span style="background:var(--glow-3)"></span></div>
+        <code>data-theme="frost"</code></div>
+    </section>
+  </div>
+</div>
+<script src="../core/glowgrid.js"></script>
+<script src="../themes/forge.js"></script>
+<script src="../themes/frost.js"></script>
+<script>Glowgrid.autoInit();</script>
+</body>
+</html>

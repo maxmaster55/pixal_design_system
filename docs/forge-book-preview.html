@@ -1,0 +1,389 @@
+<title>Rust Forge Field Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Silkscreen&family=VT323&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: landscape A4 sheets, two columns per sheet, Ember Cave tokens with a forge palette for Rust */
+:root{
+  --void:#0b0714; --cave:#170d24; --rock:#3b2a3f; --ember:#ff8a2a; --ember-hot:#ffd36b; --ember-dim:#b24d0a; --acid:#7cf36b; --frost:#4bc6e9; --hexlit:#ffb8f4;
+  --paper:#ffffff; --ink:#1c1226; --ink-soft:#5b4a63; --rule:#d9d0de; --tint:#f4eff6; --tint-ember:#fff1e4; --violet:#6b2b8f;
+  --tint-frost:#eef7fb; --frost-ink:#17607a; --tint-acid:#eefae9; --acid-ink:#2a6b33; --tint-warn:#fff7dc; --warn-ink:#8a5200; --err:#b3261e;
+  --display:"Pixelify Sans","Silkscreen",monospace; --label:"Silkscreen","Pixelify Sans",monospace;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif; --code:"VT323","Courier New",monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:#e9def0;font-family:var(--body);margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ---------- screen wrapper ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+.hd{display:flex;flex-direction:column;gap:10px}
+.hd .k{font-family:var(--label);font-size:12px;letter-spacing:.24em;color:var(--frost);text-transform:uppercase}
+.hd h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1;margin:0;color:var(--ember-hot);text-shadow:3px 3px 0 #3a1206}
+.hd p{max-width:68ch;margin:0;line-height:1.55;font-size:16px;color:#cdbfd6}
+.cap{font-family:var(--label);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember);margin:0 0 8px;display:flex;gap:12px;flex-wrap:wrap}
+.cap span{color:#9f8bb0}
+.sheet{width:100%;aspect-ratio:297/210;position:relative;overflow:hidden;box-shadow:8px 8px 0 #000;background:#fff}
+.sheet > .page{position:absolute;left:0;top:0;transform-origin:0 0;transform:scale(var(--k,1))}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.note{background:var(--cave);padding:16px 18px;box-shadow:6px 6px 0 #000;line-height:1.5;font-size:15px;min-width:0}
+.note b{display:block;font-family:var(--label);font-weight:400;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--frost);margin-bottom:6px}
+.outline{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.op{background:var(--cave);padding:18px 20px;box-shadow:6px 6px 0 #000;min-width:0}
+.op h3{font-family:var(--display);font-size:22px;margin:4px 0 10px;color:#fff;line-height:1.1}
+.op .pk{font-family:var(--label);font-size:11px;letter-spacing:.18em;color:var(--ember);text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.op .pk i{font-style:normal;color:#9f8bb0}
+.op ol{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.op li{font-size:14.5px;line-height:1.45;color:#cdbfd6;display:grid;grid-template-columns:30px 1fr;gap:6px}
+.op li::before{content:attr(data-n);font-family:var(--code);font-size:19px;color:var(--ember-hot);line-height:1}
+.op li strong{color:#fff;font-weight:600}
+h2.sec{font-family:var(--display);font-size:30px;margin:12px 0 0;color:#fff}
+
+/* ---------- print pages ---------- */
+.page{width:297mm;height:210mm;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:9.3pt;line-height:1.45;position:relative;overflow:hidden}
+.inner{position:absolute;left:14mm;right:14mm;top:12mm;bottom:15mm}
+.cols{column-count:2;column-gap:10mm;column-rule:.7pt dotted #cbbfd2;column-fill:auto;height:100%}
+.folio{position:absolute;left:14mm;right:14mm;bottom:6.5mm;display:flex;justify-content:space-between;font-family:var(--label);font-size:6.3pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.folio b{font-weight:400;color:var(--ember-dim)}
+.cols p{margin:0 0 2.2mm}
+.cols ul,.cols ol{margin:0 0 2.4mm;padding-left:5mm}
+.cols li{margin:0 0 .8mm}
+h3.chap{font-family:var(--display);font-weight:700;font-size:14.5pt;line-height:1.1;margin:0 0 3mm;display:flex;gap:2.6mm;align-items:flex-start;break-after:avoid;text-wrap:balance}
+h3.chap::before{content:"";flex:0 0 3mm;height:3mm;margin-top:1.6mm;background:var(--ember);box-shadow:1.2pt 1.2pt 0 var(--ink),2.4pt 2.4pt 0 var(--ink)}
+h3.chap small{display:block;font-family:var(--label);font-weight:400;font-size:6.5pt;letter-spacing:.16em;color:var(--ember-dim);margin-bottom:1mm}
+h4{font-family:var(--display);font-weight:600;font-size:10.6pt;margin:3mm 0 1.4mm;break-after:avoid}
+code{font-family:var(--code);font-size:1.2em;background:var(--tint);padding:0 .7mm;line-height:1}
+pre{font-family:var(--code);font-size:10.8pt;line-height:1.06;margin:0 0 2.8mm;white-space:pre-wrap;break-inside:avoid}
+pre.rs{background:var(--ink);color:#f3e9f7;padding:2.6mm 3.4mm}
+pre.rs .c{color:#9f8bb0} pre.rs .k{color:var(--ember-hot)} pre.rs .n,pre.rs .l{color:var(--acid)} pre.rs .s{color:var(--frost)} pre.rs .t{color:var(--hexlit)} pre.rs .m{color:var(--ember)}
+.px{clip-path:polygon(0 1.4mm,1.4mm 1.4mm,1.4mm 0,calc(100% - 1.4mm) 0,calc(100% - 1.4mm) 1.4mm,100% 1.4mm,100% calc(100% - 1.4mm),calc(100% - 1.4mm) calc(100% - 1.4mm),calc(100% - 1.4mm) 100%,1.4mm 100%,1.4mm calc(100% - 1.4mm),0 calc(100% - 1.4mm))}
+.box{padding:2.8mm 3.6mm 2.2mm;margin:0 0 3mm;break-inside:avoid}
+.box > :last-child{margin-bottom:0}
+.box p{margin:0 0 1.6mm}
+.tag{font-family:var(--label);font-size:6.5pt;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:1.8mm;margin-bottom:1.6mm}
+.tag canvas{width:3.6mm;height:3.6mm;image-rendering:pixelated}
+.worked{background:var(--tint-ember)} .worked .tag{color:var(--ember-dim)}
+.exer{background:var(--tint)} .exer .tag{color:var(--violet)}
+.tip{background:var(--tint-acid)} .tip .tag{color:var(--acid-ink)}
+.pit{background:var(--tint-warn)} .pit .tag{color:var(--warn-ink)}
+.rustc{background:var(--tint-frost)} .rustc .tag{color:var(--frost-ink)}
+.rustc pre{color:var(--ink);font-size:10.2pt;margin-bottom:1.4mm}
+.rustc pre .e{color:var(--err)} .rustc pre .g{color:var(--frost-ink)}
+.ans{font-size:8.3pt;color:var(--ink-soft);border-top:.8pt dashed #c7b9cf;padding-top:1.6mm;margin-top:1mm !important}
+.ans em{font-style:normal;font-family:var(--label);font-size:6.3pt;letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+table.t{border-collapse:collapse;width:100%;font-size:8.2pt;line-height:1.3;margin:0 0 3mm;break-inside:avoid}
+table.t th{font-family:var(--label);font-weight:400;font-size:6.2pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:var(--ink);color:#fff;padding:1.3mm 1.8mm}
+table.t td{padding:1mm 1.8mm;border-bottom:.6pt solid var(--rule);vertical-align:top}
+table.t td:first-child{font-family:var(--code);font-size:10.4pt;line-height:1}
+.box table.t{background:#fff}
+.case{display:flex;align-items:baseline;gap:2mm;font-family:var(--display);font-weight:600;font-size:10.6pt;margin:0 0 1.6mm;break-after:avoid}
+.case b{font-family:var(--label);font-weight:400;font-size:6.5pt;letter-spacing:.12em;color:#fff;background:var(--ember-dim);padding:.6mm 1.6mm}
+.lbl{font-family:var(--label);font-size:6.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .8mm}
+
+/* cover */
+.cov{background:var(--void)}
+.cov canvas.art{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.cov .ttl{position:absolute;left:17mm;top:19mm;width:132mm;display:flex;flex-direction:column;gap:4mm}
+.kicker{font-family:var(--label);font-size:8.2pt;letter-spacing:.3em;color:var(--frost);text-transform:uppercase;text-shadow:.6pt .6pt 0 #000}
+.cov h1{font-family:var(--display);font-weight:700;margin:0;line-height:.86;font-size:104pt;color:var(--ember-hot);text-shadow:3pt 3pt 0 #3a1206,0 0 16pt rgba(255,138,42,.55)}
+.cov h1 span{display:block;font-size:38pt;line-height:1.05;color:#fff;text-shadow:2pt 2pt 0 #2a1640;letter-spacing:.02em;margin-top:2mm}
+.cov .sub{font-family:var(--code);font-size:17pt;color:#e9def0;line-height:1;text-shadow:1.2pt 1.2pt 0 #000}
+.cov .sub i{font-style:normal;color:var(--ember)}
+.cov .foot{position:absolute;left:17mm;bottom:33mm;font-family:var(--label);font-size:7.2pt;letter-spacing:.22em;color:var(--acid);text-shadow:1pt 1pt 0 #000;text-transform:uppercase}
+.cov .blurb{font-size:10pt;line-height:1.5;color:#e9def0;max-width:112mm;text-shadow:1pt 1pt 0 #000;margin:0}
+
+/* opener header on a content page */
+.band{position:absolute;left:0;right:0;top:0;height:38.5mm}
+.band canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.ophd{position:absolute;left:14mm;right:14mm;top:44mm;display:grid;grid-template-columns:1fr 1fr;column-gap:10mm;align-items:start}
+.partno{font-family:var(--label);font-size:7.4pt;letter-spacing:.2em;color:var(--ember);text-transform:uppercase;margin-bottom:2mm}
+.chap-h{font-family:var(--display);font-weight:700;font-size:25pt;line-height:1;margin:0 0 2.6mm;text-wrap:balance}
+.lead{font-size:10pt;line-height:1.45;font-weight:600;margin:0}
+.toc{display:flex;flex-direction:column;gap:1.7mm;padding-top:1mm}
+.toc div{display:flex;gap:3mm;align-items:baseline;font-size:9pt}
+.toc b{font-family:var(--label);font-weight:400;font-size:6.8pt;color:var(--ember);min-width:10mm;letter-spacing:.08em}
+.toc i{flex:1;font-style:normal;border-bottom:.8pt dotted #b9aac2;padding-bottom:.4mm}
+.toc span{font-family:var(--code);font-size:11pt;color:var(--ink-soft);min-width:6mm;text-align:right}
+.below{top:92mm}
+
+/* contents page */
+.ct .c-part{display:flex;gap:3mm;align-items:baseline;margin:2.6mm 0 1.2mm;break-after:avoid}
+.ct .c-part b{font-family:var(--label);font-weight:400;font-size:6.8pt;color:var(--ink);min-width:12mm}
+.ct .c-part i{flex:1;font-style:normal;font-family:var(--display);font-weight:600;font-size:10.4pt;border-bottom:1pt solid var(--ink)}
+.ct .c-part span,.ct .c-ch span{font-family:var(--code);font-size:11pt;color:var(--ink-soft)}
+.ct .c-ch{display:flex;gap:3mm;align-items:baseline;font-size:8.6pt;margin:0 0 .9mm}
+.ct .c-ch b{font-family:var(--label);font-weight:400;font-size:6.5pt;color:var(--ember);min-width:12mm;padding-left:3mm}
+.ct .c-ch i{flex:1;font-style:normal;border-bottom:.7pt dotted #b9aac2}
+.bigh{font-family:var(--display);font-weight:700;font-size:21pt;line-height:1;margin:0 0 3mm}
+
+@media print{
+  @page{size:A4 landscape;margin:0}
+  body{background:#fff}
+  .wrap{display:block;padding:0;max-width:none}
+  .hd,.notes,.outline,h2.sec,.cap{display:none}
+  .sheet{aspect-ratio:auto;box-shadow:none;overflow:visible;width:297mm;height:210mm;break-after:page}
+  .sheet > .page{position:relative;transform:none}
+}
+</style>
+
+<div class="wrap">
+  <header class="hd">
+    <div class="k">Design preview · for your approval</div>
+    <h1>Rust: The Forge Field Book</h1>
+    <p>Five sample sheets in the Ember Cave style, printed landscape A4 with two columns per sheet. Below them is the full topic outline. Nothing else is written yet; once you approve the look and the topics, I build the full PDF.</p>
+  </header>
+
+  <!-- ===== 1. COVER ===== -->
+  <div>
+    <p class="cap">Sheet 1 · Front cover <span>New forge scene, seed 1515</span></p>
+    <div class="sheet"><div class="page cov">
+      <canvas class="art" data-forge="cover" data-seed="1515" width="1360" height="960"></canvas>
+      <div class="ttl">
+        <div class="kicker">A field book for forging safe, fast code</div>
+        <h1>RUST<span>THE FORGE MANUAL</span></h1>
+        <div class="sub">own <i>&gt;</i> borrow <i>&gt;</i> model <i>&gt;</i> forge <i>&gt;</i> ship</div>
+      </div>
+      <div class="foot">Study on paper · 5 parts · 22 chapters · 120+ problems</div>
+    </div></div>
+  </div>
+
+  <!-- ===== 2. CONTENTS + HOW TO USE ===== -->
+  <div>
+    <p class="cap">Sheet 2 · Contents and how to use the book <span>Two columns, one sheet</span></p>
+    <div class="sheet"><div class="page">
+      <div class="inner"><div class="cols ct">
+        <div class="partno">Contents</div>
+        <h2 class="bigh">What is inside</h2>
+        <div class="c-part"><b>Start</b><i>How to study Rust on paper</i><span>3</span></div>
+        <div class="c-part"><b>Part 1</b><i>Ownership and the core language</i><span>4</span></div>
+        <div class="c-ch"><b>1</b><i>The Rust mindset and the toolchain</i><span>4</span></div>
+        <div class="c-ch"><b>2</b><i>Values, types and expressions</i><span>5</span></div>
+        <div class="c-ch"><b>3</b><i>Ownership and moves</i><span>6</span></div>
+        <div class="c-ch"><b>4</b><i>Borrowing and references</i><span>7</span></div>
+        <div class="c-ch"><b>5</b><i>Lifetimes without fear</i><span>8</span></div>
+        <div class="c-part"><b>Part 2</b><i>Modeling with types</i><span>10</span></div>
+        <div class="c-ch"><b>6</b><i>Structs, enums and pattern matching</i><span>10</span></div>
+        <div class="c-ch"><b>7</b><i>Errors as values: Option, Result and ?</i><span>11</span></div>
+        <div class="c-ch"><b>8</b><i>Traits and generics</i><span>12</span></div>
+        <div class="c-ch"><b>9</b><i>Collections and iterators</i><span>14</span></div>
+        <div class="c-ch"><b>10</b><i>Strings and text</i><span>15</span></div>
+        <div class="c-part"><b>Part 3</b><i>Idiomatic Rust</i><span>16</span></div>
+        <div class="c-ch"><b>11</b><i>Design idioms that pay off</i><span>16</span></div>
+        <div class="c-ch"><b>12</b><i>Smart pointers and interior mutability</i><span>17</span></div>
+        <div class="c-ch"><b>13</b><i>Closures and functional style</i><span>18</span></div>
+        <div class="c-ch"><b>14</b><i>Modules, crates, tests and docs</i><span>19</span></div>
+        <div class="c-part"><b>Part 4</b><i>Concurrency, async and the metal</i><span>21</span></div>
+        <div class="c-ch"><b>15</b><i>Threads, Send, Sync and channels</i><span>21</span></div>
+        <div class="c-ch"><b>16</b><i>Async Rust</i><span>22</span></div>
+        <div class="c-ch"><b>17</b><i>Unsafe, FFI and no_std</i><span>23</span></div>
+        <div class="c-ch"><b>18</b><i>Performance habits</i><span>24</span></div>
+        <div class="c-part"><b>Part 5</b><i>Problem solving workshop</i><span>25</span></div>
+        <div class="c-ch"><b>19</b><i>Borrow checker clinic</i><span>25</span></div>
+        <div class="c-ch"><b>20</b><i>Algorithms the Rust way</i><span>27</span></div>
+        <div class="c-ch"><b>21</b><i>Use-case builds</i><span>29</span></div>
+        <div class="c-ch"><b>22</b><i>The puzzle set</i><span>31</span></div>
+        <div class="c-part"><b>Back</b><i>Cheat sheets and glossary</i><span>33</span></div>
+
+        <h3 class="chap" style="margin-top:4mm"><span><small>Start here</small>How to study Rust on paper</span></h3>
+        <p>Rust is a language you learn by arguing with its compiler. This book lets you have that argument with a pencil. Every chapter shows real code, the exact error the compiler prints, and the fix, so you can practise reading and reasoning the way you will at a keyboard.</p>
+        <h4>The four questions</h4>
+        <p>Ask these of every line you read. Most Rust bugs and most compiler errors are an answer you got wrong.</p>
+        <ol>
+          <li><strong>Who owns this value?</strong> Exactly one variable does.</li>
+          <li><strong>Is it moved, copied or borrowed here?</strong></li>
+          <li><strong>How long does each borrow live?</strong> Draw it as a bar next to the code.</li>
+          <li><strong>What can fail, and where is it handled?</strong></li>
+        </ol>
+        <div class="box tip px"><div class="tag"><canvas data-ember="icon" data-icon="key" data-color="#2a6b33" width="7" height="7"></canvas>Tip</div>
+          <p>Keep a notebook page called <strong>Error diary</strong>. Each time a chapter shows a compiler error, write its code (like <code>E0382</code>), one line on the cause and one line on the fix. By Part 5 you will have your own index of the errors you will meet most.</p></div>
+        <h4>The box types</h4>
+        <p><strong>Worked</strong> boxes trace code step by step. <strong>rustc says</strong> boxes print real compiler output. <strong>Tip</strong> and <strong>Pitfall</strong> boxes are habits worth keeping. <strong>Exercises</strong> end each chapter, with answers under the dashed line: cover them with a card until you have tried.</p>
+      </div></div>
+      <div class="folio"><span><b>Rust</b> · Contents</span><span>2</span></div>
+    </div></div>
+  </div>
+
+  <!-- ===== 3. PART OPENER + CHAPTER ===== -->
+  <div>
+    <p class="cap">Sheet 3 · Part opener with the chapter starting below it <span>The band replaces the full opener page, which saves a sheet per part</span></p>
+    <div class="sheet"><div class="page">
+      <div class="band"><canvas data-forge="band" data-seed="16" data-accent="#4bc6e9" width="1360" height="176"></canvas></div>
+      <div class="ophd">
+        <div>
+          <div class="partno">Part 1</div>
+          <h2 class="chap-h">Ownership and the core&nbsp;language</h2>
+          <p class="lead">Every value has exactly one owner. Learn to see owners, moves and borrows on paper and the rest of Rust becomes ordinary.</p>
+        </div>
+        <div class="toc">
+          <div><b>Ch 1</b><i>The Rust mindset and the toolchain</i><span>4</span></div>
+          <div><b>Ch 2</b><i>Values, types and expressions</i><span>5</span></div>
+          <div><b>Ch 3</b><i>Ownership and moves</i><span>6</span></div>
+          <div><b>Ch 4</b><i>Borrowing and references</i><span>7</span></div>
+          <div><b>Ch 5</b><i>Lifetimes without fear</i><span>8</span></div>
+        </div>
+      </div>
+      <div class="inner below"><div class="cols">
+        <h3 class="chap"><span><small>Chapter 3</small>Ownership and moves</span></h3>
+        <p>Every value has one <strong>owner</strong>, the variable that holds it. When the owner goes out of scope, Rust frees the value. Assigning a heap value like a <code>String</code> to another variable, or passing it to a function, <strong>moves</strong> it: the new variable is the owner and the old one can no longer be used.</p>
+        <div class="box worked px"><div class="tag"><canvas data-ember="icon" data-icon="gear" data-color="#b24d0a" width="7" height="7"></canvas>Worked: trace a move</div>
+<pre class="rs px">fn main() {
+    let a = String::from("ore"); // a owns the buffer
+    let b = a;                   // moved: b owns it
+    println!("{b}");             // fine
+    println!("{a}");             // error: a was moved
+}</pre>
+          <table class="t"><tr><th>Line</th><th>a</th><th>b</th><th>Buffer "ore"</th></tr>
+            <tr><td>2</td><td>owner</td><td>-</td><td>allocated</td></tr>
+            <tr><td>3</td><td>moved out</td><td>owner</td><td>same buffer, not copied</td></tr>
+            <tr><td>6</td><td>-</td><td>dropped</td><td>freed once, by b</td></tr></table>
+        </div>
+        <div class="box rustc px"><div class="tag"><canvas data-ember="icon" data-icon="bug" data-color="#17607a" width="7" height="7"></canvas>rustc says</div>
+<pre><span class="e">error[E0382]: borrow of moved value: `a`</span>
+  <span class="g">|</span>  let a = String::from("ore");
+  <span class="g">|</span>      - move occurs because `a` has type `String`,
+  <span class="g">|</span>        which does not implement the `Copy` trait
+  <span class="g">|</span>  let b = a;
+  <span class="g">|</span>          - value moved here</pre>
+          <p>Fix it by borrowing (<code>let b = &amp;a;</code>) or, only if you truly need two copies, <code>let b = a.clone();</code></p></div>
+        <div class="box pit px"><div class="tag"><canvas data-ember="icon" data-icon="warn" data-color="#8a5200" width="7" height="7"></canvas>Pitfall: a borrow into a Vec, then a push</div>
+<pre class="rs px">let mut v = vec![1, 2, 3];
+let first = &amp;v[0];
+v.push(4);            // E0502: v is still borrowed
+println!("{first}");</pre>
+          <p><code>push</code> may move the whole buffer to a bigger allocation, which would leave <code>first</code> pointing at freed memory. Copy the number out (<code>let first = v[0];</code>) or finish using <code>first</code> before you push.</p></div>
+      </div></div>
+      <div class="folio"><span><b>Part 1</b> · Ownership and the core language</span><span>6</span></div>
+    </div></div>
+  </div>
+
+  <!-- ===== 4. PROBLEM SOLVING ===== -->
+  <div>
+    <p class="cap">Sheet 4 · Problem solving workshop <span>Case cards: symptom, broken code, diagnosis, fix</span></p>
+    <div class="sheet"><div class="page">
+      <div class="inner"><div class="cols">
+        <h3 class="chap"><span><small>Chapter 19</small>Borrow checker clinic</span></h3>
+        <p>Each case is a program a real learner writes in their first month. Read the broken code, predict the error before you read it, then compare your fix with the one given.</p>
+        <div class="case"><b>Case 3</b>Returning a reference to a local</div>
+<pre class="rs px">fn shout(text: &amp;str) -&gt; &amp;str {
+    let loud = text.to_uppercase();
+    &amp;loud          // E0515: loud dies at the brace
+}</pre>
+        <p class="lbl">Diagnosis</p>
+        <p><code>loud</code> is a new <code>String</code> owned by the function. A reference cannot outlive its owner, so there is nothing valid to point at after the function returns.</p>
+        <p class="lbl">Fix</p>
+<pre class="rs px">fn shout(text: &amp;str) -&gt; String {
+    text.to_uppercase()  // hand the owner to the caller
+}</pre>
+        <div class="case"><b>Case 4</b>Calling a &amp;mut self method inside a loop over self</div>
+<pre class="rs px">for item in &amp;self.items {
+    self.log(item);  // log(&amp;mut self): E0502
+}</pre>
+        <p class="lbl">Fix: borrow the fields, not the whole struct</p>
+<pre class="rs px">let Self { items, log, .. } = self;
+for item in items.iter() {
+    log.push(format!("saw {item}"));
+}</pre>
+        <p>Inside one function Rust tracks borrows per field, so <code>items</code> and <code>log</code> can be borrowed together. A method call borrows all of <code>self</code>.</p>
+        <div class="box tip px"><div class="tag"><canvas data-ember="icon" data-icon="key" data-color="#2a6b33" width="7" height="7"></canvas>Tip: when references fight you, use indices</div>
+          <p>Trees with parent links and graphs are painful with references. Keep nodes in a <code>Vec</code> and link them by <code>usize</code> index: no lifetimes, no <code>Rc&lt;RefCell&lt;_&gt;&gt;</code>.</p>
+<pre class="rs px">struct Node { val: i32, parent: Option&lt;usize&gt;, kids: Vec&lt;usize&gt; }
+struct Tree { nodes: Vec&lt;Node&gt; }</pre></div>
+        <h3 class="chap" style="margin-top:3mm"><span><small>Chapter 20</small>Algorithms the Rust way</span></h3>
+        <div class="box worked px"><div class="tag"><canvas data-ember="icon" data-icon="gear" data-color="#b24d0a" width="7" height="7"></canvas>Worked: two sum, [2, 4, 9, 3] with target 7</div>
+<pre class="rs px">fn two_sum(nums: &amp;[i32], target: i32) -&gt; Option&lt;(usize, usize)&gt; {
+    let mut seen = HashMap::new(); // value -&gt; index (std::collections)
+    for (i, &amp;n) in nums.iter().enumerate() {
+        if let Some(&amp;j) = seen.get(&amp;(target - n)) {
+            return Some((j, i));
+        }
+        seen.insert(n, i);
+    }
+    None
+}</pre>
+          <table class="t"><tr><th>i</th><th>n</th><th>Need</th><th>seen before the step</th><th>Result</th></tr>
+            <tr><td>0</td><td>2</td><td>5</td><td>{}</td><td>insert 2:0</td></tr>
+            <tr><td>1</td><td>4</td><td>3</td><td>{2:0}</td><td>insert 4:1</td></tr>
+            <tr><td>2</td><td>9</td><td>-2</td><td>{2:0, 4:1}</td><td>insert 9:2</td></tr>
+            <tr><td>3</td><td>3</td><td>4</td><td>{2:0, 4:1, 9:2}</td><td>found: Some((1, 3))</td></tr></table>
+</div>
+        <div class="box exer px"><div class="tag"><canvas data-ember="icon" data-icon="q" data-color="#6b2b8f" width="7" height="7"></canvas>Problem 20.4</div>
+          <p>Write <code>fn max_gap(v: &amp;[i32]) -&gt; Option&lt;i32&gt;</code> that returns the largest difference between neighbours, using one iterator chain and no index variable.</p>
+          <p class="ans"><em>Answer</em> <code>v.windows(2).map(|w| (w[1] - w[0]).abs()).max()</code>. It returns <code>None</code> for fewer than two items, because <code>windows(2)</code> yields nothing.</p></div>
+      </div></div>
+      <div class="folio"><span><b>Part 5</b> · Problem solving workshop</span><span>26</span></div>
+    </div></div>
+  </div>
+
+  <!-- ===== 5. BACK COVER ===== -->
+  <div>
+    <p class="cap">Sheet 5 · Back cover <span>Same forge, different seed</span></p>
+    <div class="sheet"><div class="page cov">
+      <canvas class="art" data-forge="cover" data-seed="2024" width="1360" height="960"></canvas>
+      <div class="ttl">
+        <div class="kicker">The end of the book, the start of the work</div>
+        <div class="sub">If it compiles, test it. <i>If it doesn't, read the error twice.</i></div>
+        <p class="blurb">Twenty-two chapters on writing Rust the way experienced Rust programmers do: ownership you can draw, types that model your problem, errors as values, fearless threads, and a workshop of more than 120 problems with worked answers. Made to be printed and studied with a pencil.</p>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="notes">
+    <div class="note"><b>What stays the same</b>The Ember Cave look from the reverse engineering book: pixel fonts for titles and labels, Plex Sans for reading, VT323 for code, dark art only on covers and part bands, white interiors that print cheaply.</div>
+    <div class="note"><b>What is new</b>A forge cover: a glowing cog over an anvil, a molten pool, and embers shaped like Rust symbols ( &amp; ? ! { } &lt; &gt; ). Three new boxes: rustc says (compiler output), Tip and Pitfall. Code is colored for Rust.</div>
+    <div class="note"><b>Saving paper</b>Landscape A4, two columns, 9.3 pt text. Part openers are a band at the top of a working page instead of a page of their own. About 34 sheets in total, roughly half the paper of the 61-page RE book.</div>
+  </div>
+
+  <h2 class="sec">Topic outline</h2>
+  <div class="outline">
+    <div class="op"><div class="pk">Start here <i>1 sheet</i></div><h3>How to study Rust on paper</h3><ol>
+      <li data-n="·"><span><strong>Reading compiler errors.</strong> The anatomy of a rustc message, the four questions, keeping an error diary.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 1 <i>6 sheets</i></div><h3>Ownership and the core language</h3><ol>
+      <li data-n="1"><span><strong>The Rust mindset and the toolchain.</strong> What Rust guarantees and what it costs; cargo, crates, editions and Cargo.toml explained with printed output; a guided tour of one small program.</span></li>
+      <li data-n="2"><span><strong>Values, types and expressions.</strong> Integers and overflow, floats, char, tuples, arrays, slices, shadowing, blocks as expressions, if, loop, while, for and ranges.</span></li>
+      <li data-n="3"><span><strong>Ownership and moves.</strong> One owner, moves, Copy and Clone, drop order, drawing stack and heap.</span></li>
+      <li data-n="4"><span><strong>Borrowing and references.</strong> Shared vs mutable borrows, the one-writer rule, slices, how long a borrow lives (non-lexical lifetimes).</span></li>
+      <li data-n="5"><span><strong>Lifetimes without fear.</strong> What 'a means, the elision rules, structs holding references, 'static, when to stop and own the data instead.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 2 <i>6 sheets</i></div><h3>Modeling with types</h3><ol>
+      <li data-n="6"><span><strong>Structs, enums and pattern matching.</strong> Making invalid states impossible to write, match, if let, let else, guards and bindings.</span></li>
+      <li data-n="7"><span><strong>Errors as values.</strong> Option and Result, the ? operator, custom error enums, From conversions, when panic is right, library vs application errors (thiserror and anyhow patterns).</span></li>
+      <li data-n="8"><span><strong>Traits and generics.</strong> Defining and implementing traits, bounds and where clauses, impl Trait vs dyn Trait, the std traits worth knowing (Debug, Clone, Default, PartialEq, Ord, Hash, Display, Iterator).</span></li>
+      <li data-n="9"><span><strong>Collections and iterators.</strong> Vec, HashMap, HashSet, BTreeMap, VecDeque, BinaryHeap; the entry API; iterator chains, laziness, collect.</span></li>
+      <li data-n="10"><span><strong>Strings and text.</strong> String vs &amp;str, UTF-8 and why you cannot index a string, chars and bytes, parsing and formatting.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 3 <i>5 sheets</i></div><h3>Idiomatic Rust</h3><ol>
+      <li data-n="11"><span><strong>Design idioms that pay off.</strong> Newtype, builder, From and Into, typestate, RAII and Drop guards, Default and struct update, choosing between enum and trait object.</span></li>
+      <li data-n="12"><span><strong>Smart pointers and interior mutability.</strong> Box, Rc, Arc, Weak, Cell, RefCell, Mutex and RwLock, with a table of when to use each.</span></li>
+      <li data-n="13"><span><strong>Closures and functional style.</strong> Fn, FnMut, FnOnce, move closures, returning closures, writing your own iterator.</span></li>
+      <li data-n="14"><span><strong>Modules, crates, tests and docs.</strong> Visibility, workspaces, features, unit and integration tests, doc tests, clippy lints worth obeying, semver basics.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 4 <i>5 sheets</i></div><h3>Concurrency, async and the metal</h3><ol>
+      <li data-n="15"><span><strong>Threads, Send, Sync and channels.</strong> Spawning and scoped threads, Arc and Mutex, channels, deadlocks and how Rust prevents data races (but not deadlocks).</span></li>
+      <li data-n="16"><span><strong>Async Rust.</strong> Futures as state machines, executors, a tokio-style server traced on paper, join and select, blocking pitfalls, cancellation.</span></li>
+      <li data-n="17"><span><strong>Unsafe, FFI and no_std.</strong> The five unsafe powers, writing a safe wrapper, calling C, embedded basics without the standard library.</span></li>
+      <li data-n="18"><span><strong>Performance habits.</strong> Zero-cost abstractions, avoiding needless clones and allocations, stack vs heap, release builds, measuring before optimizing.</span></li></ol></div>
+    <div class="op"><div class="pk">Part 5 <i>8 sheets</i></div><h3>Problem solving workshop</h3><ol>
+      <li data-n="19"><span><strong>Borrow checker clinic.</strong> 12 classic errors (E0382, E0499, E0502, E0505, E0506, E0515, E0597, E0716 and friends), each as a case card with diagnosis and fix.</span></li>
+      <li data-n="20"><span><strong>Algorithms the Rust way.</strong> Two pointers and sliding windows, hashing, sorting with keys, binary search, graphs with indices (BFS, DFS, Dijkstra), dynamic programming.</span></li>
+      <li data-n="21"><span><strong>Use-case builds.</strong> Five small projects planned and written in full: a CLI word counter, a tokenizer and state machine, a REST service, an embedded LED blinker, a game loop with entities.</span></li>
+      <li data-n="22"><span><strong>The puzzle set.</strong> 30 graded problems, from "make it compile" to "design the types", with full worked solutions.</span></li></ol></div>
+    <div class="op"><div class="pk">Back <i>2 sheets</i></div><h3>Cheat sheets and glossary</h3><ol>
+      <li data-n="·"><span>Std traits table, iterator adaptors, Option and Result combinators, error code index, smart pointer chooser, which crate for which job, glossary.</span></li></ol></div>
+  </div>
+</div>
+
+<script src="../core/glowgrid.js"></script>
+<script src="../themes/forge.js"></script>
+<script>
+(function(){
+  const KW=/\b(fn|let|mut|pub|struct|enum|impl|trait|for|in|while|loop|if|else|match|return|use|mod|self|Self|where|as|ref|move|async|await|dyn|const|static|unsafe|type|crate|super|true|false|Some|None|Ok|Err)\b/;
+  const RX=/(\/\/.*$)|("(?:[^"\\]|\\.)*")|('[a-z_]+\b(?!'))|(\b[a-z_][a-z0-9_]*!)|(\b(?:fn|let|mut|pub|struct|enum|impl|trait|for|in|while|loop|if|else|match|return|use|mod|self|Self|where|as|ref|move|async|await|dyn|const|static|unsafe|type|crate|super|true|false|Some|None|Ok|Err)\b)|(\b[A-Z][A-Za-z0-9_]*\b)|(\b\d[\d_]*(?:\.\d+)?\b)/gm;
+  const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const cls=["c","s","l","m","k","t","n"];
+  document.querySelectorAll("pre.rs").forEach(pre=>{
+    const src=pre.textContent; let out="",last=0;
+    src.replace(RX,(m,...g)=>{const off=g[g.length-2];out+=esc(src.slice(last,off));const i=g.slice(0,7).findIndex(x=>x!==undefined);out+=`<span class="${cls[i]}">${esc(m)}</span>`;last=off+m.length;return m;});
+    pre.innerHTML=out+esc(src.slice(last));
+  });
+  Ember.forgeInit();
+  const fit=()=>document.querySelectorAll(".sheet").forEach(s=>{const p=s.firstElementChild;s.style.setProperty("--k",s.clientWidth/p.offsetWidth);});
+  fit(); addEventListener("resize",fit);
+  document.fonts&&document.fonts.ready.then(()=>{fit();document.documentElement.dataset.ready="1";});
+})();
+</script>

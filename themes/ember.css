@@ -1,0 +1,8 @@
+/* Ember theme: a dark cavern lit by orange embers, a magenta crystal and an acid-green pool.
+   These are the core defaults, restated so you can switch back with data-theme="ember". */
+:root[data-theme="ember"], [data-theme="ember"]{
+  --bg:#0b0714; --surface:#170d24; --stone:#3b2a3f; --stone-lit:#8a5a5a;
+  --accent:#ff8a2a; --accent-hot:#ffd36b; --accent-deep:#b24d0a; --accent-halo:rgba(255,138,42,.55); --title-shadow:#3a1206;
+  --glow-1:#7cf36b; --glow-2:#e94bd6; --glow-3:#4bc6e9;
+  --tint-accent:#fff1e4;
+}
