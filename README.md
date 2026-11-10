@@ -9,6 +9,7 @@ It comes with three themes, and you can add your own:
 | **Ember** (default) | Dark cavern, binary embers, a crystal, an acid pool | orange, gold, green, magenta, cyan |
 | **Forge** | A glowing cog over an anvil, a molten pool, frost shards | orange, amber, pale gold, ice |
 | **Frost** | Ice cavern, a six-armed frost lattice, icicles, a frozen pool | cyan, ice white, warm ember |
+| **Geode** | Crystal cavern, one isometric crystal cube with a lit grid, crystal spikes, a violet light pool | violet, lavender, warm amber |
 
 ![The three themes: Ember, Forge and Frost covers](docs/images/themes.png)
 
@@ -22,7 +23,7 @@ Open [`docs/themes.html`](docs/themes.html) in a browser to see them live, and [
 | [`tokens.json`](tokens.json) | Every token and theme as JSON, for other tools or build steps. |
 | [`core/glowgrid.js`](core/glowgrid.js) | The art engine. Seeded terrain, lighting, dither, bloom, 12 fps animation, icons and the theme registry. No dependencies. |
 | [`core/glowgrid.css`](core/glowgrid.css) | Semantic CSS tokens and components: pixel corners, hard shadows, code blocks, panels, tables, covers and bands. |
-| [`themes/`](themes/) | `ember.css`, `forge.css` + `forge.js`, `frost.css` + `frost.js`. CSS recolors; JS adds the scene painters. |
+| [`themes/`](themes/) | `ember.css`, `forge.css` + `forge.js`, `frost.css` + `frost.js`, `geode.css` + `geode.js`. CSS recolors; JS adds the scene painters. |
 | [`docs/`](docs/) | `themes.html` (overview), `ember-theme.html` (full live reference with animation), `forge-book-preview.html` and `frost-book-preview.html` (complete book layouts). |
 | [`fonts/`](fonts/) | Pixelify Sans, Silkscreen, VT323 and IBM Plex Sans as .ttf files, with their OFL licenses. |
 | [`skills/glowgrid/SKILL.md`](skills/glowgrid/SKILL.md) | The rules packaged as a Claude skill. Copy the folder into a project's `.claude/skills/`. |
