@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowgrid examples</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Silkscreen&family=VT323&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="../core/glowgrid.css">
+<style>
+/* per-section theme scopes (same values as themes/forge.css and themes/frost.css) */
+[data-theme="forge"]{--accent:#ff9a3c;--accent-hot:#ffc56a;--accent-deep:#c25a12;--accent-halo:rgba(255,154,60,.55);--glow-1:#ffe08a;--glow-2:#f07a22;--glow-3:#bdf0ff;--tint-accent:#fff0e0}
+[data-theme="frost"]{--accent:#4bc6e9;--accent-hot:#bdf0ff;--accent-deep:#17607a;--accent-halo:rgba(75,198,233,.5);--title-shadow:#0b2a3a;--glow-1:#8fe3f7;--glow-2:#e6fbff;--glow-3:#ffd36b;--tint-accent:#eef7fb}
+.ex{padding:24px;background:var(--bg);width:fit-content}
+.bands{display:flex;flex-direction:column;gap:16px;width:760px}
+.bands canvas{width:100%;image-rendering:pixelated;display:block;box-shadow:6px 6px 0 #000}
+.bands .label{margin-bottom:6px}
+.ui{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:860px}
+.ui .card{box-shadow:8px 8px 0 #000}
+.icons{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.icons figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.icons canvas{width:56px;height:56px;image-rendering:pixelated}
+.pages{display:flex;gap:28px;width:900px}
+.pages .page{width:430px;flex:none}
+</style>
+</head>
+<body>
+
+<!-- 1. hero -->
+<div class="ex" id="ex-hero" style="width:908px">
+  <section class="hero" data-theme="frost">
+    <canvas data-glow="cover" data-theme="frost" data-seed="2605"></canvas>
+    <div class="in">
+      <div class="label" style="color:var(--glow-3)">Glowgrid · Frost theme</div>
+      <h1>Build it once.<br>Ship it frozen.</h1>
+      <p>Declarative configs, reproducible builds, one command to roll back.</p>
+      <div class="btns"><button class="btn">Get started</button><button class="btn ghost">Read the docs</button></div>
+    </div>
+  </section>
+</div>
+
+<!-- 2. ui -->
+<div class="ex" id="ex-ui">
+  <div class="ui">
+    <div class="card px">
+      <h3>Cards and buttons</h3>
+      <p>Cards sit on <code>--surface</code> with a hard 8 px shadow and stepped pixel corners. Buttons lift 2 px on hover.</p>
+      <div class="btns"><button class="btn">Primary</button><button class="btn ghost">Ghost</button></div>
+    </div>
+    <div class="card px" data-theme="forge">
+      <h3>Terminal</h3>
+      <div class="term">$ cargo build --release<br>&nbsp;&nbsp;Compiling forge v0.1.0<br>&nbsp;&nbsp;&nbsp;Finished in 2.31s<br>$ <span class="cur"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. bands -->
+<div class="ex" id="ex-bands">
+  <div class="bands">
+    <div><div class="label">Ember band · seed 7</div><canvas data-glow="band" data-theme="ember" data-seed="7"></canvas></div>
+    <div data-theme="forge"><div class="label">Forge band · seed 3</div><canvas data-glow="band" data-theme="forge" data-seed="3"></canvas></div>
+    <div data-theme="frost"><div class="label">Frost band · seed 13</div><canvas data-glow="band" data-theme="frost" data-seed="13"></canvas></div>
+  </div>
+</div>
+
+<!-- 4. print pages -->
+<div class="ex" id="ex-pages">
+  <div class="pages">
+    <div class="page cover">
+      <canvas data-glow="cover" data-theme="ember" data-seed="1337"></canvas>
+      <div class="ttl">
+        <div class="kicker">A field book for reading machines</div>
+        <h2>REVERSE<span>ENGINEERING</span></h2>
+        <div class="sub">bits &gt; code &gt; kernels</div>
+      </div>
+      <div class="foot">Study on paper · 9 parts</div>
+    </div>
+    <div class="page paper">
+      <div class="pg-in">
+        <h3 class="sec">Tracing a loop by hand</h3>
+        <p>Draw a table with one column per register and one row per pass.</p>
+<pre class="code px">    <span class="k">mov</span>  eax, <span class="n">5</span>
+    <span class="k">mov</span>  ecx, <span class="n">3</span>
+loop:
+    <span class="k">add</span>  eax, ecx   <span class="c">; eax += ecx</span>
+    <span class="k">dec</span>  ecx        <span class="c">; ecx--</span>
+    <span class="k">jnz</span>  loop</pre>
+        <table class="t trace">
+          <tr><th>Pass</th><th>eax</th><th>ecx</th></tr>
+          <tr><td>1</td><td>8</td><td>2</td></tr>
+          <tr><td>2</td><td>10</td><td>1</td></tr>
+          <tr><td>3</td><td>11</td><td>0</td></tr>
+        </table>
+        <div class="box worked px">
+          <div class="tag"><canvas data-glow="icon" data-icon="gear" data-color="#b24d0a" width="7" height="7"></canvas>Worked example</div>
+          <p><code>cmp edi, 10</code> then <code>jle .else</code> means <code>if (x &gt; 10)</code>.</p>
+        </div>
+        <div class="box exer px">
+          <div class="tag"><canvas data-glow="icon" data-icon="q" data-color="#6b2b8f" width="7" height="7"></canvas>Exercises</div>
+          <ol><li>What does <code>lea eax,[rdi+rdi*2]</code> then <code>shl eax,2</code> compute?</li></ol>
+          <p class="ans">Answer: x × 12.</p>
+        </div>
+      </div>
+      <div class="folio"><span>Part 1 · Foundations</span><span>p. 9</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. icons -->
+<div class="ex" id="ex-icons">
+  <div class="icons">
+    <figure><canvas data-glow="icon" data-icon="gear" data-color="#ff8a2a"></canvas><figcaption>gear</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="q" data-color="#e94bd6"></canvas><figcaption>q</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="key" data-color="#ffd36b"></canvas><figcaption>key</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="chip" data-color="#7cf36b"></canvas><figcaption>chip</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="bug" data-color="#4bc6e9"></canvas><figcaption>bug</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="skull" data-color="#e9def0"></canvas><figcaption>skull</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="warn" data-color="#ffd36b"></canvas><figcaption>warn</figcaption></figure>
+    <figure><canvas data-glow="icon" data-icon="book" data-color="#ff8a2a"></canvas><figcaption>book</figcaption></figure>
+  </div>
+</div>
+
+<script src="../core/glowgrid.js"></script>
+<script src="../themes/forge.js"></script>
+<script src="../themes/frost.js"></script>
+<script>Glowgrid.autoInit();</script>
+</body>
+</html>

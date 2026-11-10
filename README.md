@@ -10,7 +10,9 @@ It comes with three themes, and you can add your own:
 | **Forge** | A glowing cog over an anvil, a molten pool, frost shards | orange, amber, pale gold, ice |
 | **Frost** | Ice cavern, a six-armed frost lattice, icicles, a frozen pool | cyan, ice white, warm ember |
 
-Open [`docs/themes.html`](docs/themes.html) in a browser to see all three side by side.
+![The three themes: Ember, Forge and Frost covers](docs/images/themes.png)
+
+Open [`docs/themes.html`](docs/themes.html) in a browser to see them live, and [`docs/examples.html`](docs/examples.html) for every example below.
 
 ## What's in here
 
@@ -44,6 +46,140 @@ Open [`docs/themes.html`](docs/themes.html) in a browser to see all three side b
 ```
 
 From JavaScript: `Glowgrid.draw(canvas, { theme: "forge", kind: "cover", seed: 1515 })`. `kind` is `cover`, `band`, `animate` (ember only for now; returns `{ stop() }`) or `icon`.
+
+## Examples
+
+Every example below assumes the fonts, `core/glowgrid.css` and `core/glowgrid.js` from the quick start are loaded, plus the theme files it uses, and ends with `Glowgrid.autoInit()`. The images were captured from [`docs/examples.html`](docs/examples.html).
+
+### Landing page hero
+
+A full-bleed scene behind a title, a short line and two buttons. The scene fills the box with `object-fit: cover`, so any aspect ratio works.
+
+![Frost-themed hero with title and buttons](docs/images/hero.png)
+
+```html
+<link rel="stylesheet" href="themes/frost.css">
+<script src="themes/frost.js"></script>
+
+<section class="hero">
+  <canvas data-glow="cover" data-theme="frost" data-seed="2605"></canvas>
+  <div class="in">
+    <div class="label">Glowgrid · Frost theme</div>
+    <h1>Build it once.<br>Ship it frozen.</h1>
+    <p>Declarative configs, reproducible builds, one command to roll back.</p>
+    <div class="btns">
+      <button class="btn">Get started</button>
+      <button class="btn ghost">Read the docs</button>
+    </div>
+  </div>
+</section>
+```
+
+### Cards, buttons and a terminal
+
+Cards use `--surface`, a hard 8 px shadow and stepped pixel corners (`.px`). Put `data-theme` on any element to relight just that part of the page.
+
+![Card with buttons, and a forge-themed terminal card](docs/images/ui.png)
+
+```html
+<div class="card px">
+  <h3>Cards and buttons</h3>
+  <p>Cards sit on --surface with a hard 8 px shadow and stepped pixel corners.</p>
+  <button class="btn">Primary</button>
+  <button class="btn ghost">Ghost</button>
+</div>
+
+<div class="card px" data-theme="forge">
+  <h3>Terminal</h3>
+  <div class="term">$ cargo build --release<br>  Finished in 2.31s<br>$ <span class="cur"></span></div>
+</div>
+```
+
+### Section bands
+
+Bands are wide, short scenes for page headers and part openers. The seed picks the layout, and the same seed always draws the same picture.
+
+![Ember, Forge and Frost bands](docs/images/bands.png)
+
+```html
+<canvas data-glow="band" data-theme="ember" data-seed="7"></canvas>
+<canvas data-glow="band" data-theme="forge" data-seed="3"></canvas>
+<canvas data-glow="band" data-theme="frost" data-seed="13"></canvas>
+```
+
+### Print pages: cover and content
+
+A4 pages for books and PDFs. The cover is full-bleed art; the content page is white with ink, code on dark, a trace table, and worked-example and exercise panels.
+
+![A book cover and a content page](docs/images/pages.png)
+
+```html
+<div class="page cover">
+  <canvas data-glow="cover" data-seed="1337"></canvas>
+  <div class="ttl">
+    <div class="kicker">A field book for reading machines</div>
+    <h2>REVERSE<span>ENGINEERING</span></h2>
+    <div class="sub">bits &gt; code &gt; kernels</div>
+  </div>
+  <div class="foot">Study on paper · 9 parts</div>
+</div>
+
+<div class="page paper">
+  <div class="pg-in">
+    <h3 class="sec">Tracing a loop by hand</h3>
+    <pre class="code px"><span class="k">mov</span>  eax, <span class="n">5</span>   <span class="c">; comment</span></pre>
+    <table class="t"><tr><th>Pass</th><th>eax</th></tr><tr><td>1</td><td>8</td></tr></table>
+    <div class="box worked px">
+      <div class="tag"><canvas data-glow="icon" data-icon="gear" data-color="#b24d0a" width="7" height="7"></canvas>Worked example</div>
+      <p>...</p>
+    </div>
+    <div class="box exer px">
+      <div class="tag"><canvas data-glow="icon" data-icon="q" data-color="#6b2b8f" width="7" height="7"></canvas>Exercises</div>
+      <ol><li>...</li></ol>
+      <p class="ans">Answer: ...</p>
+    </div>
+  </div>
+  <div class="folio"><span>Part 1 · Foundations</span><span>p. 9</span></div>
+</div>
+```
+
+### Animated scene
+
+`animate` runs at 12 fps with held frames: embers rise and flicker, the crystal pulses, the pool shimmers. It shows the still frame when the user prefers reduced motion.
+
+![Animated ember cave](docs/images/animate.gif)
+
+```html
+<canvas id="live"></canvas>
+<script>
+  const anim = Glowgrid.draw(document.getElementById("live"), { kind: "animate", seed: 1337, scale: 4 });
+  // later: anim.stop();
+</script>
+```
+
+### Icons
+
+Eight 7x7 one-bit icons, drawn in any color: `gear`, `q`, `key`, `chip`, `bug`, `skull`, `warn`, `book`.
+
+![The eight pixel icons](docs/images/icons.png)
+
+```html
+<canvas data-glow="icon" data-icon="chip" data-color="#7cf36b" width="7" height="7"
+        style="width:56px;height:56px;image-rendering:pixelated"></canvas>
+```
+
+### Drawing from JavaScript
+
+```js
+// pick a theme and a scene kind, draw into any canvas
+Glowgrid.draw(canvas, { theme: "forge", kind: "cover", seed: 1515 });
+
+// add your own theme (see RULES.md section 7)
+Glowgrid.register("deepsea", {
+  cover(canvas, o) { /* build terrain with Glowgrid.cave, light it, bloom it */ },
+  band(canvas, o)  { /* ... */ }
+});
+```
 
 ### Themes in CSS
 
