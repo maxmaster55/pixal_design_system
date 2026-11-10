@@ -77,7 +77,7 @@ A full-bleed scene behind a title, a short line and two buttons. The scene fills
 
 ### Cards, buttons and a terminal
 
-Cards use `--surface`, a hard 8 px shadow and stepped pixel corners (`.px`). Put `data-theme` on any element to relight just that part of the page.
+Cards use `--surface` with a hard 8 px shadow. Add `.px` for stepped pixel corners instead (the clip removes the shadow). Put `data-theme` on any element to relight just that part of the page.
 
 ![Card with buttons, and a forge-themed terminal card](docs/images/ui.png)
 
