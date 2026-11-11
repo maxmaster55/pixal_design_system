@@ -61,3 +61,14 @@
   --tint-accent: #eef7fb;
   --accent-halo: rgba(75,198,233,0.5);
 }
+[data-glow="geode"] {
+  --accent: #9b7bff;
+  --accent-hot: #d9ccff;
+  --accent-deep: #4f35c2;
+  --title-shadow: #1d0f4a;
+  --glow-1: #b9a6ff;
+  --glow-2: #efe9ff;
+  --glow-3: #ffd36b;
+  --tint-accent: #f1edff;
+  --accent-halo: rgba(155,123,255,0.5);
+}

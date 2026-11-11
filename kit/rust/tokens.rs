@@ -26,12 +26,13 @@ pub struct Palette {
     pub title_shadow: &'static str,
 }
 
-pub const THEMES: [&str; 3] = ["ember", "forge", "frost"];
+pub const THEMES: [&str; 4] = ["ember", "forge", "frost", "geode"];
 
 pub fn palette(name: &str) -> Palette {
     match name {
         "forge" => Palette { accent: "#ff9a3c", accent_hot: "#ffc56a", accent_deep: "#c25a12", glow_1: "#ffe08a", glow_2: "#f07a22", glow_3: "#bdf0ff", tint_accent: "#fff0e0", title_shadow: "#3a1206" },
         "frost" => Palette { accent: "#4bc6e9", accent_hot: "#bdf0ff", accent_deep: "#17607a", glow_1: "#8fe3f7", glow_2: "#e6fbff", glow_3: "#ffd36b", tint_accent: "#eef7fb", title_shadow: "#0b2a3a" },
+        "geode" => Palette { accent: "#9b7bff", accent_hot: "#d9ccff", accent_deep: "#4f35c2", glow_1: "#b9a6ff", glow_2: "#efe9ff", glow_3: "#ffd36b", tint_accent: "#f1edff", title_shadow: "#1d0f4a" },
         _ => Palette { accent: "#ff8a2a", accent_hot: "#ffd36b", accent_deep: "#b24d0a", glow_1: "#7cf36b", glow_2: "#e94bd6", glow_3: "#4bc6e9", tint_accent: "#fff1e4", title_shadow: "#3a1206" },
     }
 }

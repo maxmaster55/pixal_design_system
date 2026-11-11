@@ -12,7 +12,7 @@ Read it top to bottom once; it is short on purpose. Deeper references are linked
   values), IBM Plex Sans (anything read as a sentence), Pixelify Sans (one headline per surface).
 - **1 px stone outlines at rest; 2 px accent on hover, selection and the focused thing.**
 - **Motion in held steps:** 80 ms for presses, 120 ms for toggles, 180 ms for things entering.
-- Three themes change only the lights: **Ember** (default), **Forge**, **Frost**.
+- Themes change only the lights: **Ember** (default), **Forge**, **Frost**, **Geode**.
 
 ## 2. Pick your target and copy
 

@@ -1,0 +1,28 @@
+{
+  "name": "Glowgrid geode",
+  "background": "#0b0714",
+  "foreground": "#e9def0",
+  "cursor": "#9b7bff",
+  "selection-bg": "#3b2a3f",
+  "selection-fg": "#d9ccff",
+  "normal": {
+    "black": "#170d24",
+    "red": "#ff6b8e",
+    "green": "#8fe3c0",
+    "yellow": "#ffd36b",
+    "blue": "#7ca8ff",
+    "magenta": "#9b7bff",
+    "cyan": "#8fe3f7",
+    "white": "#e9def0"
+  },
+  "bright": {
+    "black": "#5a3d52",
+    "red": "#ff97af",
+    "green": "#b6f0d8",
+    "yellow": "#ffe49c",
+    "blue": "#a8c4ff",
+    "magenta": "#b9a6ff",
+    "cyan": "#bdf0ff",
+    "white": "#ffffff"
+  }
+}
