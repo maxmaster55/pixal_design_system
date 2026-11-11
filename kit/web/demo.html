@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glowgrid Components</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Silkscreen&family=VT323&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="glowgrid-ui.css">
+<script src="icons.js"></script>
+<script src="glowgrid-ui.js"></script>
+<style>
+  /* page layout only; every component style comes from glowgrid-ui.css */
+  body { margin: 0; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding-block: 32px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 44px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 28px; align-items: start; }
+  .stack { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .line { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .demo { background: var(--air-3); padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .demo > .gg-label:first-child { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .replay { font-family: var(--label); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; background: transparent; border: 0; color: var(--accent); cursor: pointer; padding: 2px 0; }
+  .replay:hover { color: var(--accent-hot); }
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; }
+  .icons div { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 4px; background: var(--surface); }
+  .sw { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+  .sw div { display: flex; flex-direction: column; gap: 6px; }
+  .sw span { height: 40px; box-shadow: 3px 3px 0 #000; }
+  nav.toc { position: sticky; top: 0; z-index: 30; background: var(--bg); box-shadow: 0 2px 0 var(--black); padding: 10px 0; }
+  nav.toc .line { gap: 6px 16px; }
+  .anchor { position: relative; }
+</style>
+</head>
+<body class="gg">
+<div class="wrap">
+  <header class="stack">
+    <div class="gg-label cold">Glowgrid design system &middot; every component, every motion</div>
+    <h1 class="gg-display hero gg-m-wipe">Components</h1>
+    <p style="max-width:62ch;margin:0;color:#bfb0c9">Sixty components in seven groups. Each one lists its motion; press <b>Replay</b> to see it again. Copy the markup from this file: the classes are in <code class="gg-value">glowgrid-ui.css</code> and the behaviours in <code class="gg-value">glowgrid-ui.js</code>.</p>
+    <div class="line">
+      <span class="gg-label">Theme</span>
+      <div class="gg-segment" data-gg-segment id="themes"><button aria-pressed="true" data-theme="ember">Ember</button><button aria-pressed="false" data-theme="forge">Forge</button><button aria-pressed="false" data-theme="frost">Frost</button><button aria-pressed="false" data-theme="geode">Geode</button></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Sections">
+    <div class="line gg-crumbs" style="font-size:10.5px">
+      <a href="#motion">Motion</a><a href="#actions">Actions</a><a href="#inputs">Inputs</a><a href="#navigation">Navigation</a><a href="#containers">Containers</a><a href="#feedback">Feedback</a><a href="#data">Data</a><a href="#desktop">Desktop</a><a href="#foundations">Foundations</a>
+    </div>
+  </nav>
+
+  <!-- ============================== MOTION ============================== -->
+  <section class="stack anchor" id="motion">
+    <h2 class="gg-heading">Motion primitives</h2>
+    <p class="gg-hint" style="max-width:70ch">Every animation is one of these. They move in held steps, never smooth tweens, and the one-shot ones finish within 400 ms.</p>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">gg-m-rise &middot; 200 ms, 5 steps <button class="replay" data-gg-replay="#m-rise">Replay</button></div><div id="m-rise" class="stack gg-fresh"><div class="gg-row"><i class="gg-dot on"></i><span class="gg-name">Rows enter one after another</span></div><div class="gg-row"><i class="gg-dot"></i><span class="gg-name">30 ms apart</span></div><div class="gg-row"><i class="gg-dot"></i><span class="gg-name">Lists, cards</span></div></div></div>
+      <div class="demo"><div class="gg-label">gg-m-drop &middot; 180 ms, 4 steps <button class="replay" data-gg-replay="#m-drop">Replay</button></div><div id="m-drop"><div class="gg-menu gg-m-drop" style="min-width:0"><button>Menus and popovers</button><button class="active">Drop from their trigger</button><button>Leave with lift-out</button></div></div></div>
+      <div class="demo"><div class="gg-label">gg-m-slide &middot; 180 ms, 4 steps <button class="replay" data-gg-replay="#m-slide">Replay</button></div><div id="m-slide"><div class="gg-toast gg-m-slide"><i class="gg-dot on" style="margin-top:4px"></i><div>Toasts, drawers and tab pages slide in from the side.</div></div></div></div>
+      <div class="demo"><div class="gg-label">gg-m-wipe &middot; 400 ms, 8 steps <button class="replay" data-gg-replay="#m-wipe">Replay</button></div><div id="m-wipe"><div class="gg-display gg-m-wipe" style="font-size:30px">Reveals wipe across</div></div></div>
+      <div class="demo"><div class="gg-label">gg-m-assemble &middot; 280 ms, 7 steps <button class="replay" data-gg-replay="#m-asm">Replay</button></div><div id="m-asm"><div class="gg-card gg-m-assemble" style="box-shadow:0 0 0 2px var(--accent)"><span class="gg-name">Built from 24 px cells</span><span class="gg-hint">Windows, dialogs, hero art.</span></div></div></div>
+      <div class="demo"><div class="gg-label">gg-m-flash &middot; 2 frames <button class="replay" data-gg-replay="#m-flash">Replay</button></div><div id="m-flash" class="line"><span class="gg-value gg-m-flash" style="font-size:30px;padding:2px 8px">1,284</span><span class="gg-hint">A value that just changed.</span></div></div>
+      <div class="demo"><div class="gg-label">gg-m-shake &middot; 240 ms, 4 steps <button class="replay" data-gg-replay="#m-shake">Replay</button></div><div id="m-shake"><input class="gg-input gg-m-shake" value="wrong password" aria-label="Rejected input" style="box-shadow:inset 0 0 0 2px var(--alert);width:100%"></div></div>
+      <div class="demo"><div class="gg-label">Typing &middot; 10 characters a second <button class="replay" data-gg-replay="#m-type">Replay</button></div><div id="m-type" class="gg-term"><span style="color:var(--accent)">&gt;</span> <span data-gg-type>sudo nixos-rebuild switch</span><span class="gg-cursor"></span></div></div>
+      <div class="demo"><div class="gg-label">Ambient loops</div><div class="line"><i class="gg-dot on"></i><span class="gg-hint">breathe: two held levels</span></div><div class="line"><span class="gg-cursor"></span><span class="gg-hint">blink: 1 Hz cursor</span></div><div class="line"><div class="gg-spinner"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="gg-hint">chase: 12 frames a second</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============================== ACTIONS ============================== -->
+  <section class="stack anchor" id="actions">
+    <h2 class="gg-heading">Actions</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Button &middot; hover lifts 2 px, press sinks</div><div class="line"><button class="gg-btn primary">Primary</button><button class="gg-btn">Default</button><button class="gg-btn ghost">Ghost</button><button class="gg-btn danger">Delete</button><button class="gg-btn" disabled>Disabled</button><button class="gg-btn primary busy">Saving</button></div></div>
+      <div class="demo"><div class="gg-label">Icon button &middot; press sinks 3 px</div><div class="line"><button class="gg-iconbtn gg-tooltip" data-tip="Copy"><i data-gg-icon="copy"></i></button><button class="gg-iconbtn gg-tooltip" data-tip="Terminal"><i data-gg-icon="terminal"></i></button><button class="gg-iconbtn gg-tooltip" data-tip="Ping"><i data-gg-icon="pulse"></i></button><button class="gg-iconbtn gg-tooltip" data-tip="Send"><i data-gg-icon="send"></i></button><button class="gg-iconbtn gg-tooltip" data-tip="Close"><i data-gg-icon="close"></i></button></div></div>
+      <div class="demo"><div class="gg-label">Segmented control &middot; 80 ms colour step</div><div class="gg-segment" data-gg-segment><button aria-pressed="true">Day</button><button aria-pressed="false">Week</button><button aria-pressed="false">Month</button></div><div class="gg-label" style="margin-top:6px">Link</div><p style="margin:0">Read the <a class="gg-link" href="#motion">motion rules</a> first.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================== INPUTS ============================== -->
+  <section class="stack anchor" id="inputs">
+    <h2 class="gg-heading">Inputs</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Text field &middot; focus ring steps in; invalid shakes <button class="replay" data-gg-replay="#f-bad">Replay</button></div>
+        <label class="gg-field"><span class="gg-label">Device name</span><input class="gg-input" id="in-name" value="max-l5"><span class="gg-hint">Shown to other devices on your tailnet.</span></label>
+        <label class="gg-field invalid" id="f-bad"><span class="gg-label">Port</span><input class="gg-input" id="in-port" value="99999"><span class="gg-error">Ports run from 1 to 65535.</span></label></div>
+      <div class="demo"><div class="gg-label">Select, textarea, search</div>
+        <select class="gg-input" id="in-select" aria-label="Exit node"><option>No exit node</option><option>vps-fra</option><option>home-server</option></select>
+        <textarea class="gg-input" id="in-area" aria-label="Notes" placeholder="Notes"></textarea>
+        <input class="gg-input value" id="in-launch" value="> ghi" aria-label="Launcher input"></div>
+      <div class="demo"><div class="gg-label">Switch &middot; thumb moves in 3 steps</div><div class="line"><label class="gg-switch"><input type="checkbox" checked aria-label="On"><i></i></label><label class="gg-switch"><input type="checkbox" aria-label="Off"><i></i></label><label class="gg-switch power"><input type="checkbox" checked aria-label="Power"><i></i></label></div>
+        <div class="gg-label">Checkbox, radio</div><div class="line"><input class="gg-check" type="checkbox" checked aria-label="Checked"><input class="gg-check" type="checkbox" aria-label="Unchecked"><input class="gg-check" type="radio" name="r1" checked aria-label="Radio A"><input class="gg-check" type="radio" name="r1" aria-label="Radio B"></div>
+        <div class="gg-label">Slider</div><input class="gg-range" type="range" value="60" aria-label="Volume">
+        <div class="gg-label">Stepper &middot; value flashes</div><div class="gg-stepper" data-gg-stepper data-min="0" data-max="20"><button aria-label="Less"><i data-gg-icon="minus"></i></button><output>4</output><button aria-label="More"><i data-gg-icon="plus"></i></button></div>
+        <div class="gg-label">Chips</div><div class="line" style="gap:8px"><span class="gg-chip">linux<button data-gg-dismiss aria-label="Remove linux"><i data-gg-icon="close" data-cell="1"></i></button></span><span class="gg-chip">exit-node<button data-gg-dismiss aria-label="Remove exit-node"><i data-gg-icon="close" data-cell="1"></i></button></span></div></div>
+      <div class="demo"><div class="gg-label">Drop zone &middot; outline lights on drag-over</div><div class="gg-dropzone"><div class="gg-display" style="font-size:18px;color:var(--text)">Drop files here to send</div>or pick a device above</div></div>
+    </div>
+  </section>
+
+  <!-- ============================== NAVIGATION ============================== -->
+  <section class="stack anchor" id="navigation">
+    <h2 class="gg-heading">Navigation</h2>
+    <div class="demo"><div class="gg-label">Bar</div>
+      <div class="gg-bar"><div><div class="gg-cells-ws"><i class="busy"></i><i class="on"></i><i class="busy"></i><i></i></div><span class="gg-label">kitty &middot; project</span></div><div class="gg-clock">06:42 PM</div><div><span class="gg-label cold">US</span><span class="gg-label gg-good">Tailnet</span><span class="gg-label">Vol 90%</span></div></div></div>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Tabs &middot; page slides in</div>
+        <div class="gg-panel framed" data-gg-tabs><div class="gg-tabs" role="tablist"><button class="gg-tab" role="tab" aria-selected="true" data-panel="#tp1">Devices<span class="gg-count">5</span></button><button class="gg-tab" role="tab" aria-selected="false" data-panel="#tp2">Exit node</button><button class="gg-tab" role="tab" aria-selected="false" data-panel="#tp3">Settings</button></div>
+          <div class="gg-body" id="tp1"><div class="gg-row"><i class="gg-dot on"></i><span class="gg-name">max-l5</span></div><div class="gg-row"><i class="gg-dot"></i><span class="gg-name">old-thinkpad</span></div></div>
+          <div class="gg-body" id="tp2" hidden><div class="gg-row"><i class="gg-dot focal"></i><span class="gg-name">vps-fra</span><span class="gg-pill" style="margin-left:auto">In use</span></div></div>
+          <div class="gg-body" id="tp3" hidden><div class="gg-row"><div class="gg-grow"><span class="gg-name">Shields up</span><span class="gg-hint">Block incoming connections</span></div><label class="gg-switch"><input type="checkbox" aria-label="Shields up"><i></i></label></div></div></div></div>
+      <div class="demo"><div class="gg-label">Sidebar &middot; accent rail steps in</div><nav class="gg-nav" aria-label="Example"><a href="#navigation" aria-current="page"><i data-gg-icon="home"></i>Overview</a><a href="#navigation"><i data-gg-icon="folder"></i>Files</a><a href="#navigation"><i data-gg-icon="gear"></i>Settings</a></nav>
+        <div class="gg-label">Breadcrumbs</div><div class="gg-crumbs"><a href="#navigation">Home</a><a href="#navigation">Projects</a><span>nixos_conf</span></div>
+        <div class="gg-label">Pagination</div><div class="gg-pager"><button aria-label="Previous"><i data-gg-icon="left" data-cell="1"></i></button><button>1</button><button aria-current="page">2</button><button>3</button><button aria-label="Next"><i data-gg-icon="right" data-cell="1"></i></button></div>
+        <div class="gg-label">Steps</div><div class="gg-steps" aria-label="Step 3 of 5"><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i></div></div>
+      <div class="demo"><div class="gg-label">Menu &middot; drops in, lifts out</div><div style="position:relative"><button class="gg-btn" data-gg-menu="#menu1">Open menu</button>
+        <div class="gg-menu" id="menu1" hidden style="position:absolute;top:44px;left:0;z-index:10"><button>Open<span class="gg-kbd">Enter</span></button><button>Rename<span class="gg-kbd">F2</span></button><hr><button>Delete<span class="gg-kbd">Del</span></button></div></div>
+        <div class="gg-label" style="margin-top:6px">Launcher</div><div class="gg-launcher"><input value="> ghi" aria-label="Search"><ul><li class="active"><i data-gg-icon="search"></i>Ghidra<small>App</small></li><li><i data-gg-icon="terminal"></i>GitHub CLI<small>Command</small></li></ul></div></div>
+    </div>
+  </section>
+
+  <!-- ============================== CONTAINERS ============================== -->
+  <section class="stack anchor" id="containers">
+    <h2 class="gg-heading">Containers</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Panel with head and foot</div>
+        <div class="gg-panel lit"><div class="gg-head"><div class="stack" style="gap:2px;flex:1"><div class="gg-display" style="color:var(--glow-1)">Connected</div><div class="gg-value soft">max-l5 &middot; 100.84.12.7</div></div><label class="gg-switch power"><input type="checkbox" checked aria-label="Power"><i></i></label></div>
+          <div class="gg-body"><div class="gg-row selected"><i class="gg-dot on"></i><div class="gg-grow"><span class="gg-name">max-l5</span><span class="gg-value">100.84.12.7</span></div><button class="gg-iconbtn" aria-label="Copy"><i data-gg-icon="copy"></i></button></div><div class="gg-group">Offline</div><div class="gg-row"><i class="gg-dot"></i><div class="gg-grow"><span class="gg-name">old-thinkpad</span><span class="gg-value soft">last seen 3 days ago</span></div></div></div>
+          <div class="gg-foot"><span class="gg-good">Copied</span><span>1 online</span></div></div></div>
+      <div class="demo"><div class="gg-label">Card &middot; interactive one lifts and lights</div><div class="gg-card"><span class="gg-name">Plain card</span><span class="gg-hint">Surface fill, hard 8 px shadow.</span></div><div class="gg-card interactive" tabindex="0"><span class="gg-name">Interactive card</span><span class="gg-hint">Hover me.</span></div>
+        <div class="gg-label">Dividers</div><hr class="gg-divider"><hr class="gg-divider dashed">
+        <div class="gg-label">Window frames</div><div class="line" style="gap:22px"><div class="gg-window focused" style="width:110px;height:64px"></div><div class="gg-window" style="width:110px;height:64px"></div></div></div>
+      <div class="demo"><div class="gg-label">Dialog &middot; assembles from cells</div><div class="line"><button class="gg-btn primary" data-gg-open="#dlg">Open dialog</button><button class="gg-btn" data-gg-open="#drawer">Open drawer</button></div>
+        <div class="gg-label">Accordion &middot; marker lights, content rises</div><details class="gg-accordion" open><summary>What is emissive colour?</summary><div>A colour that means "this is a light". Use it only for the one thing that should draw the eye.</div></details><details class="gg-accordion"><summary>Why no rounded corners?</summary><div>The system is drawn on a pixel grid; curves do not exist on it.</div></details>
+        <div class="gg-label">Tooltip</div><div><button class="gg-btn gg-tooltip" data-tip="Appears in one step">Hover for a tooltip</button></div></div>
+    </div>
+  </section>
+
+  <!-- ============================== FEEDBACK ============================== -->
+  <section class="stack anchor" id="feedback">
+    <h2 class="gg-heading">Feedback</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Toast &middot; slides in, leaves after 4 s</div><div class="line"><button class="gg-btn" onclick="ggToast('Sent boot.img to home-server')">Success</button><button class="gg-btn" onclick="ggToast('Not allowed. Run: sudo tailscale set --operator=$USER', 'bad')">Error</button></div>
+        <div class="gg-label">Banners</div><div class="gg-banner"><div><div class="gg-label cold">Info</div>A new version is ready.</div></div><div class="gg-banner good"><div><div class="gg-label gg-good">Done</div>Backup finished.</div></div><div class="gg-banner warn"><div><div class="gg-label accent">Warning</div>Battery at 12%.</div></div><div class="gg-banner bad"><div><div class="gg-label gg-bad">Error</div>Could not reach the server.</div></div></div>
+      <div class="demo"><div class="gg-label">Progress cells &middot; fill by cell <button class="replay" id="prog-replay">Replay</button></div><div class="gg-cells" id="prog"></div>
+        <div class="gg-label">Stepped bar &middot; fills on appearing <button class="replay" data-gg-replay="#barfill">Replay</button></div><div class="gg-bar-fill" id="barfill"><i style="width:68%"></i></div>
+        <div class="gg-label">Spinner &middot; 8-cell spark chase</div><div class="line"><div class="gg-spinner"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="gg-value soft">working</span></div>
+        <div class="gg-label">Skeleton &middot; one lit cell scans</div><div class="gg-skeleton"></div><div class="gg-skeleton" style="width:60%"></div>
+        <div class="gg-label">Badges and status</div><div class="line"><span class="gg-badge">4</span><span class="gg-badge quiet">12</span><span class="gg-pill">Active</span><span class="gg-pill ghost">Linux</span><i class="gg-dot on"></i><i class="gg-dot focal"></i><i class="gg-dot alert"></i><i class="gg-dot"></i></div></div>
+      <div class="demo"><div class="gg-label">On-screen display</div><div class="gg-osd"><i data-gg-icon="volume"></i><div class="gg-cells"><i class="full"></i><i class="full"></i><i class="full"></i><i class="full"></i><i class="full"></i><i class="full"></i><i class="full"></i><i></i><i></i><i></i></div><span class="gg-value" style="color:var(--text)">70</span></div>
+        <div class="gg-label">Empty state</div><div class="gg-empty" style="background:var(--bg)"><i data-gg-icon="folder" data-cell="4"></i><div class="gg-display">Nothing here yet</div><div>Files you receive will appear in this list.</div><button class="gg-btn primary">Choose files</button></div></div>
+    </div>
+  </section>
+
+  <!-- ============================== DATA ============================== -->
+  <section class="stack anchor" id="data">
+    <h2 class="gg-heading">Data</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Stat tile &middot; counts up, then flashes <button class="replay" data-gg-replay="#stats">Replay</button></div><div class="line" id="stats" style="align-items:stretch;gap:20px"><div class="gg-stat"><span class="gg-label">Devices online</span><span class="gg-value" data-gg-count="12">12</span><span class="gg-delta">+3 this week</span></div><div class="gg-stat"><span class="gg-label">Latency ms</span><span class="gg-value" data-gg-count="23.4">23.4</span><span class="gg-delta down">+4.1</span></div></div>
+        <div class="gg-label">Key and value</div><dl class="gg-kv"><dt>Address</dt><dd>100.84.12.7</dd><dt>Relay</dt><dd>fra</dd><dt>Last seen</dt><dd>2 min ago</dd></dl></div>
+      <div class="demo"><div class="gg-label">Bar chart &middot; columns grow in steps <button class="replay" data-gg-replay="#bars">Replay</button></div><div class="gg-bars" id="bars" role="img" aria-label="Example: eight bars, the sixth is the peak"><i style="height:30%"></i><i style="height:45%"></i><i style="height:38%"></i><i style="height:62%"></i><i style="height:74%"></i><i class="peak" style="height:96%"></i><i style="height:58%"></i><i class="cold" style="height:40%"></i></div>
+        <div class="gg-label">Meter</div><div class="gg-meter"><i style="height:20%"></i><i style="height:35%"></i><i style="height:30%"></i><i style="height:60%"></i><i style="height:85%"></i><i style="height:50%"></i><i style="height:40%"></i><i style="height:70%"></i></div>
+        <div class="gg-label">Table</div><table class="gg-table"><thead><tr><th>Token</th><th>Role</th></tr></thead><tbody><tr><td class="gg-value">accent</td><td>Primary light</td></tr><tr><td class="gg-value">stone</td><td>Unlit things</td></tr></tbody></table></div>
+      <div class="demo"><div class="gg-label">Calendar</div><div class="gg-calendar" id="cal"></div>
+        <div class="gg-label">Timeline</div><ul class="gg-timeline"><li class="done"><span class="gg-name">Downloaded</span></li><li class="now"><span class="gg-name">Building</span></li><li><span class="gg-name">Activating</span></li></ul>
+        <div class="gg-label">Avatar, keys</div><div class="line"><span class="gg-avatar">YK</span><span class="gg-avatar">M</span><span class="gg-kbd">Mod</span><span class="gg-kbd">Shift</span><span class="gg-kbd">T</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============================== DESKTOP ============================== -->
+  <section class="stack anchor" id="desktop">
+    <h2 class="gg-heading">Desktop pieces</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Lock screen</div><div class="stack" style="align-items:center;gap:10px;padding:10px 0"><div class="gg-label cold">Wednesday &middot; 11 November</div><div class="gg-bigclock" style="font-size:84px">06:42</div><div class="gg-login"><span class="gg-label">maxmaster</span><div class="gg-pins"><i class="set"></i><i class="set"></i><i class="set"></i><i class="set"></i><i></i><i></i></div></div></div></div>
+      <div class="demo"><div class="gg-label">Terminal &middot; block cursor, 1 Hz</div><div class="gg-term"><span style="color:var(--accent)">&gt;</span> nix flake update
+<span class="gg-good">Done.</span> 5 inputs updated
+<span style="color:var(--accent)">&gt;</span> <span class="gg-cursor"></span></div></div>
+      <div class="demo"><div class="gg-label">Notification</div><div class="gg-toast"><i class="gg-dot on" style="margin-top:4px"></i><div><div class="gg-label gg-good">Tailscale</div><div>Connected to your tailnet. 3 devices online.</div></div></div><div class="gg-toast"><i class="gg-dot alert" style="margin-top:4px"></i><div><div class="gg-label gg-bad">Battery</div><div>8% left. Plug in soon.</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- ============================== FOUNDATIONS ============================== -->
+  <section class="stack anchor" id="foundations">
+    <h2 class="gg-heading">Foundations</h2>
+    <div class="grid">
+      <div class="demo"><div class="gg-label">Type roles</div><div class="gg-display">Display: one headline</div><div class="gg-label accent">Label &middot; Silkscreen upper case</div><div class="gg-value">VALUE 100.84.12.7 06:42</div><div><span class="gg-name">Name in Plex Sans 600</span><br><span class="gg-hint">Hint text: sentences are always IBM Plex Sans.</span></div></div>
+      <div class="demo" style="grid-column:span 2;min-width:0"><div class="gg-label">Colours</div><div class="sw" id="swatches"></div></div>
+    </div>
+    <div class="demo"><div class="gg-label">Icons &middot; 7&times;7, shown at 4&times;</div><div class="icons" id="icons"></div></div>
+  </section>
+</div>
+
+<div class="gg-scrim" id="dlg" hidden><div class="gg-dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-t"><header><span class="gg-display" id="dlg-t" style="font-size:20px">Remove device?</span><button class="gg-iconbtn" data-gg-close aria-label="Close"><i data-gg-icon="close"></i></button></header><div class="gg-body">old-thinkpad will be removed from your tailnet. It can join again by logging in.</div><footer><button class="gg-btn" data-gg-close>Cancel</button><button class="gg-btn danger" data-gg-close>Remove</button></footer></div></div>
+<aside class="gg-drawer" id="drawer" hidden aria-label="Example drawer"><div class="gg-head"><span class="gg-display" style="font-size:20px;flex:1">Details</span><button class="gg-iconbtn" data-gg-close aria-label="Close"><i data-gg-icon="close"></i></button></div><div class="gg-body gg-fresh"><div class="gg-row"><span class="gg-name">Drawers slide in from the edge</span></div><div class="gg-row"><span class="gg-name">and their rows rise in</span></div></div></aside>
+
+<script>
+  document.querySelectorAll('#themes button').forEach(b => b.addEventListener('click', () => {
+    const t = b.dataset.theme;
+    if (t === 'ember') document.documentElement.removeAttribute('data-glow'); else document.documentElement.setAttribute('data-glow', t);
+  }));
+  document.getElementById('icons').innerHTML = Object.keys(GLOWGRID_ICONS).map(n => `<div>${ggIcon(n, 4)}<span class="gg-label">${n}</span></div>`).join('');
+  const names = ['bg', 'surface', 'air-3', 'air-5', 'stone', 'stone-lit', 'text-soft', 'text', 'accent', 'accent-hot', 'glow-1', 'glow-2', 'glow-3', 'alert'];
+  document.getElementById('swatches').innerHTML = names.map(n => `<div><span style="background:var(--${n})"></span><b class="gg-label">${n}</b></div>`).join('');
+  // calendar: November 2026 starts on a Sunday
+  const cal = document.getElementById('cal');
+  cal.innerHTML = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => `<b>${d}</b>`).join('') + Array.from({ length: 35 }, (_, i) => { const d = i + 1; return d <= 30 ? `<span class="${d === 11 ? 'today' : ''}">${d}</span>` : `<span class="out">${d - 30}</span>`; }).join('');
+  // progress cells filling one cell at a time, eight a second
+  const prog = document.getElementById('prog');
+  function fill() { prog.innerHTML = '<i></i>'.repeat(16); let i = 0; clearInterval(prog._t); prog._t = setInterval(() => { if (i < 16) prog.children[i++].className = i < 16 ? 'full' : 'done'; else { [...prog.children].forEach(c => c.className = 'done'); clearInterval(prog._t); } }, 125); }
+  document.getElementById('prog-replay').addEventListener('click', fill);
+  prog.innerHTML = '<i class="done"></i>'.repeat(16);
+</script>
+</body>
+</html>

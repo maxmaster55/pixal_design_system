@@ -1,0 +1,28 @@
+{
+  "name": "Glowgrid forge",
+  "background": "#0b0714",
+  "foreground": "#e9def0",
+  "cursor": "#ff9a3c",
+  "selection-bg": "#3b2a3f",
+  "selection-fg": "#ffc56a",
+  "normal": {
+    "black": "#170d24",
+    "red": "#ff5f5f",
+    "green": "#b4e06b",
+    "yellow": "#ffc56a",
+    "blue": "#7cc8ff",
+    "magenta": "#f07a22",
+    "cyan": "#bdf0ff",
+    "white": "#e9def0"
+  },
+  "bright": {
+    "black": "#5a3d52",
+    "red": "#ff8a80",
+    "green": "#d2f09a",
+    "yellow": "#ffe08a",
+    "blue": "#a8dcff",
+    "magenta": "#ffab6b",
+    "cyan": "#e0f8ff",
+    "white": "#ffffff"
+  }
+}

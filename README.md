@@ -15,6 +15,28 @@ It comes with three themes, and you can add your own:
 
 Open [`docs/themes.html`](docs/themes.html) in a browser to see them live, and [`docs/examples.html`](docs/examples.html) for every example below.
 
+## UI kit: apply the style to an interface, fast
+
+Besides the art engine, the repo carries a kit for screen interfaces (apps, bars, panels,
+desktops) with about 60 components, each with defined motion.
+
+| Start here | What it is |
+| --- | --- |
+| [`AGENTS.md`](AGENTS.md) | **Hand this to an agent.** The look in six lines, which file to copy for each platform, and how to check the result. |
+| [`COMPONENTS.md`](COMPONENTS.md) | Every component: purpose, states, motion, and which platforms have it. |
+| [`MOTION.md`](MOTION.md) | The motion primitives and timings. |
+| [`kit/web/demo.html`](kit/web/demo.html) | The live catalogue. Open it in a browser; every animation has a replay button. |
+| [`kit/`](kit/) | Ready-made files: web CSS and JS, GTK 4 CSS, Qt Quick components, Rust constants, terminal and console palettes, niri, Noctalia, a VS Code theme, a cursor theme, 32 pixel icons. |
+| [`tools/check.py`](tools/check.py) | Checks any files against the rules: corners, shadows, gradients, off-palette colours, fonts, motion. |
+| [`tools/build_tokens.py`](tools/build_tokens.py) | Regenerates every platform's token file from `tokens.json`. |
+
+```sh
+python3 tools/check.py path/to/your/ui      # did I apply it correctly?
+python3 tools/build_single.py               # one self-contained HTML catalogue in dist/
+```
+
+Built with the kit: [Pixelscale](https://github.com/maxmaster55/pixelscale), a Tailscale panel in GTK 4.
+
 ## What's in here
 
 | Path | What it is |

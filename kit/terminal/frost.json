@@ -1,0 +1,28 @@
+{
+  "name": "Glowgrid frost",
+  "background": "#0b0714",
+  "foreground": "#e9def0",
+  "cursor": "#4bc6e9",
+  "selection-bg": "#3b2a3f",
+  "selection-fg": "#bdf0ff",
+  "normal": {
+    "black": "#170d24",
+    "red": "#ff6b7a",
+    "green": "#8fe3c0",
+    "yellow": "#ffd36b",
+    "blue": "#4bc6e9",
+    "magenta": "#b9a4ff",
+    "cyan": "#8fe3f7",
+    "white": "#e9def0"
+  },
+  "bright": {
+    "black": "#5a3d52",
+    "red": "#ff97a2",
+    "green": "#b6f0d8",
+    "yellow": "#ffe49c",
+    "blue": "#8fdcf5",
+    "magenta": "#d5c8ff",
+    "cyan": "#e6fbff",
+    "white": "#ffffff"
+  }
+}

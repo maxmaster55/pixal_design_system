@@ -1,0 +1,11 @@
+# Qt Quick module for the Glowgrid kit. Copy this folder next to your QML and `import "glowgrid"`,
+# or in Quickshell drop the files into your config directory (singletons are found automatically
+# there; rename Glowgrid.qml's `pragma Singleton` use as your shell requires).
+singleton Glowgrid 1.0 Glowgrid.qml
+GgPanel 1.0 GgPanel.qml
+GgLabel 1.0 GgLabel.qml
+GgValue 1.0 GgValue.qml
+GgIcon 1.0 GgIcon.qml
+GgButton 1.0 GgButton.qml
+GgSwitch 1.0 GgSwitch.qml
+GgCells 1.0 GgCells.qml
