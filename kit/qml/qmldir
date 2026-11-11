@@ -9,3 +9,4 @@ GgIcon 1.0 GgIcon.qml
 GgButton 1.0 GgButton.qml
 GgSwitch 1.0 GgSwitch.qml
 GgCells 1.0 GgCells.qml
+GgSpring 1.0 GgSpring.qml
