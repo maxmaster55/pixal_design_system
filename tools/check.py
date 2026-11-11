@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-EXTS = {".css", ".scss", ".html", ".htm", ".qml", ".js", ".ts", ".tsx", ".jsx", ".rs", ".kdl", ".conf", ".ini", ".toml", ".svg", ".vue", ".svelte"}
+EXTS = {".css", ".scss", ".html", ".htm", ".qml", ".js", ".ts", ".tsx", ".jsx", ".rs", ".lua", ".kdl", ".conf", ".ini", ".toml", ".svg", ".vue", ".svelte"}
 FONTS = {"pixelify sans", "silkscreen", "vt323", "ibm plex sans", "noto sans", "courier new", "segoe ui", "jetbrainsmono nerd font", "jetbrains mono",
          "monospace", "sans-serif", "serif", "system-ui", "ui-monospace", "inherit", "initial", "unset"}
 
@@ -47,7 +47,9 @@ def palette():
 
     walk(t, "")
     # tints the kit itself uses that are not named tokens
-    for extra, name in (("#241433", "ramp.air[4]"), ("#bfb0c9", "body text on dark (docs)"), ("#cdbfd6", "body text on dark (docs)"), ("#9482ad", "comment violet")):
+    for extra, name in (("#241433", "ramp.air[4]"), ("#bfb0c9", "body text on dark (docs)"), ("#cdbfd6", "body text on dark (docs)"), ("#9482ad", "comment violet"),
+                        ("#cfc0e6", "property text (editors)"), ("#16261d", "diff added tint (editors)"), ("#2a1220", "diff removed tint (editors)"),
+                        ("#ffa565", "string, ember (editors)"), ("#f06fe0", "type, ember (editors)"), ("#ffb38f", "string, frost (editors)")):
         out.setdefault(extra, name)
     return out
 
@@ -80,7 +82,7 @@ def check_text(path, text, pal):
     def add(line, rule, level, msg):
         findings.append({"file": str(path), "line": line, "rule": rule, "level": level, "message": msg})
 
-    is_code = path.suffix in {".rs", ".js", ".ts", ".tsx", ".jsx", ".qml"}
+    is_code = path.suffix in {".rs", ".js", ".ts", ".tsx", ".jsx", ".qml", ".lua"}
     for n, line in enumerate(text.splitlines(), 1):
         if "glowgrid-allow" in line:
             continue
@@ -122,7 +124,7 @@ def check_text(path, text, pal):
         m = RE_FONT.search(line)
         if m and "var(" not in m.group(1):
             for fam in m.group(1).split(","):
-                f = fam.strip().strip("\"'").lower()
+                f = fam.replace("!important", "").strip().strip("\"'").lower()
                 if f and f not in FONTS and not f.startswith(("var(", "-apple", "blinkmac")):
                     add(n, "font", "warning", f"font '{fam.strip()}'. The faces are Pixelify Sans, Silkscreen, VT323 and IBM Plex Sans.")
 

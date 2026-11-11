@@ -30,7 +30,8 @@ Do not retype colours or invent components. Copy the kit file for your platform.
 | The Linux console | `kit/terminal/console-<theme>.txt` (16 hex colours) | |
 | niri | `kit/desktop/niri.kdl` | |
 | Noctalia shell | `kit/noctalia/glowgrid-<theme>.json` into `~/.config/noctalia/palettes/` | `source = "custom"`, `corner_radius_scale = 0` |
-| VS Code | `kit/vscode/` (an extension folder) | |
+| VS Code | `kit/vscode/` (an extension: themes, defaults, and `ui.css` for shape, fonts and shadows) | Read its README: the UI style is applied by a command, or at build time on NixOS |
+| Neovim | `kit/neovim/` (`colors/glowgrid.lua` and an `init.lua` with a bar-style status line) | `:colorscheme glowgrid` |
 | A cursor theme | `kit/cursor/` | `python3 build.py` |
 | Icons | `kit/icons/icons.json` (32 icons, 7×7 bits) | `python3 tools/icons.py export DIR` for SVGs |
 | Anything else | `tokens.json` | Follow section 3 |
