@@ -1,0 +1,131 @@
+// Glowgrid for the niri compositor. Merge these blocks into ~/.config/niri/config.kdl.
+// Focus ring in the accent, square corners, a hard offset shadow, spring movement from the
+// Weave presets, and windows that assemble from 24 px cells.
+
+layout {
+    gaps 16
+    focus-ring {
+        width 3
+        active-color "#ff8a2a"      // accent (forge #ff9a3c, frost #4bc6e9)
+        inactive-color "#3b2a3f"    // stone
+    }
+    border { off; }
+    shadow {
+        on
+        softness 0
+        spread 0
+        offset x=8 y=8
+        color "#000000"
+    }
+}
+
+window-rule {
+    geometry-corner-radius 0
+    clip-to-geometry true
+}
+
+prefer-no-csd
+
+animations {
+    slowdown 1.0
+
+    // Movement uses spring presets from weave-motion (github.com/maxmaster55/
+    // weave-motion, js/weave.js PRESETS): a change of destination keeps the
+    // momentum instead of restarting.
+    //   gentle  (140, 1.0)   large surfaces, no overshoot
+    //   default (300, 0.8)   everyday movement
+    //   fast    (500, 0.85)  direct manipulation
+    workspace-switch {
+        spring damping-ratio=1.0 stiffness=140 epsilon=0.0001
+    }
+    horizontal-view-movement {
+        spring damping-ratio=0.8 stiffness=300 epsilon=0.0001
+    }
+    window-movement {
+        spring damping-ratio=0.8 stiffness=300 epsilon=0.0001
+    }
+    window-resize {
+        spring damping-ratio=0.85 stiffness=500 epsilon=0.0001
+    }
+    overview-open-close {
+        spring damping-ratio=0.8 stiffness=300 epsilon=0.0001
+    }
+
+    window-open {
+        duration-ms 280
+        curve "linear"
+        custom-shader r"
+            float cell_hash(vec2 p) {
+                return fract(sin(dot(p, vec2(127.1, 311.7)) + niri_random_seed * 43.0) * 43758.5453);
+            }
+
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                if (coords_geo.x < 0.0 || coords_geo.x > 1.0 || coords_geo.y < 0.0 || coords_geo.y > 1.0)
+                    return vec4(0.0);
+
+                float cell = 24.0;
+                vec2 px = coords_geo.xy * size_geo.xy;
+                vec2 id = floor(px / cell);
+                vec2 cells = max(ceil(size_geo.xy / cell), vec2(1.0));
+
+                // held frames: 7 whole steps across the animation
+                float p = floor(niri_clamped_progress * 7.0 + 0.5) / 7.0;
+
+                // each cell attaches at its own moment: centre first, with a little scatter
+                vec2 c = (id + 0.5) / cells - 0.5;
+                float start = clamp(length(c) * 1.1 + cell_hash(id) * 0.3, 0.0, 1.0) * 0.7;
+                float local = clamp((p - start) / 0.3, 0.0, 1.0);
+                if (local <= 0.0)
+                    return vec4(0.0);
+
+                // the cell grows from its own centre until it fills its square
+                vec2 f = abs(fract(px / cell) - 0.5);
+                if (max(f.x, f.y) > 0.5 * local)
+                    return vec4(0.0);
+
+                vec3 coords_tex = niri_geo_to_tex * coords_geo;
+                vec4 color = texture2D(niri_tex, coords_tex.st);
+                // a cell that is still settling is lit by the accent
+                if (local < 1.0)
+                    color.rgb = mix(color.rgb, vec3(1.0, 0.54, 0.16) * color.a, 0.35);
+                return color;
+            }
+        "
+    }
+
+    window-close {
+        duration-ms 220
+        curve "linear"
+        custom-shader r"
+            float cell_hash(vec2 p) {
+                return fract(sin(dot(p, vec2(127.1, 311.7)) + niri_random_seed * 43.0) * 43758.5453);
+            }
+
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                if (coords_geo.x < 0.0 || coords_geo.x > 1.0 || coords_geo.y < 0.0 || coords_geo.y > 1.0)
+                    return vec4(0.0);
+
+                float cell = 24.0;
+                vec2 px = coords_geo.xy * size_geo.xy;
+                vec2 id = floor(px / cell);
+                vec2 cells = max(ceil(size_geo.xy / cell), vec2(1.0));
+
+                float p = floor(niri_clamped_progress * 6.0 + 0.5) / 6.0;
+
+                // cells detach from the edges inwards
+                vec2 c = (id + 0.5) / cells - 0.5;
+                float start = clamp((0.75 - length(c)) * 1.1 + cell_hash(id) * 0.3, 0.0, 1.0) * 0.7;
+                float local = 1.0 - clamp((p - start) / 0.3, 0.0, 1.0);
+                if (local <= 0.0)
+                    return vec4(0.0);
+
+                vec2 f = abs(fract(px / cell) - 0.5);
+                if (max(f.x, f.y) > 0.5 * local)
+                    return vec4(0.0);
+
+                vec3 coords_tex = niri_geo_to_tex * coords_geo;
+                return texture2D(niri_tex, coords_tex.st);
+            }
+        "
+    }
+}

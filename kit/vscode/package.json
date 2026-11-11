@@ -1,0 +1,38 @@
+{
+  "name": "glowgrid-theme",
+  "displayName": "Glowgrid",
+  "description": "Glowgrid colour themes: a dark world lit from within. Ember, Forge and Frost.",
+  "version": "1.0.0",
+  "publisher": "maxmaster",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "glowgrid",
+    "dark",
+    "pixel"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Glowgrid Ember",
+        "uiTheme": "vs-dark",
+        "path": "./themes/glowgrid-ember-color-theme.json"
+      },
+      {
+        "label": "Glowgrid Forge",
+        "uiTheme": "vs-dark",
+        "path": "./themes/glowgrid-forge-color-theme.json"
+      },
+      {
+        "label": "Glowgrid Frost",
+        "uiTheme": "vs-dark",
+        "path": "./themes/glowgrid-frost-color-theme.json"
+      }
+    ]
+  }
+}

@@ -1,0 +1,354 @@
+/* Glowgrid UI: components for screen interfaces. Load kit/web/tokens.css first.
+   Every rule here follows RULES.md: square corners, hard offset shadows, no gradients,
+   light only from the palette, motion in short held steps. Class names start with gg-.
+
+   Type roles:  .gg-display  one headline per surface (Pixelify Sans)
+                .gg-label    labels, tags, tabs, buttons (Silkscreen, upper case, spaced)
+                .gg-value    numbers, addresses, clocks (VT323)
+                body text    names and sentences (IBM Plex Sans). Never set a sentence in a pixel face. */
+
+.gg, .gg * { box-sizing: border-box; border-radius: 0; }
+/* the hidden attribute always wins, whatever display a component sets */
+.gg [hidden], .gg[hidden] { display: none !important; }
+/* inline components keep their own width inside a column layout */
+.gg-segment, .gg-stepper, .gg-osd, .gg-login, .gg-pager, .gg-steps, .gg-spinner { align-self: flex-start; }
+.gg { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 14px; line-height: 1.45; }
+
+/* ---------- type ---------- */
+.gg-display { font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1; color: var(--accent-hot); margin: 0; }
+.gg-display.hero { font-size: clamp(40px, 9vw, 96px); text-shadow: 4px 4px 0 var(--title-shadow), 0 0 26px var(--accent-halo); }
+.gg-label { font-family: var(--label); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-soft); }
+.gg-label.accent { color: var(--accent); }
+.gg-label.cold { color: var(--glow-3); }
+.gg-value { font-family: var(--code); font-size: 18px; line-height: 1; color: var(--glow-3); font-variant-numeric: tabular-nums; }
+.gg-value.soft { color: var(--text-soft); }
+.gg-name { font-weight: 600; font-size: 14.5px; }
+.gg-hint { font-size: 12.5px; color: var(--text-soft); }
+.gg-good { color: var(--glow-1); } .gg-bad { color: var(--alert); }
+
+/* ---------- surfaces ---------- */
+/* a panel or card: surface fill, hard 8px shadow. Add .lit for the accent outline (popups, the focused thing). */
+.gg-panel { background: var(--surface); box-shadow: var(--shadow-lg) var(--shadow-lg) 0 var(--black); display: flex; flex-direction: column; min-width: 0; }
+.gg-panel.lit { box-shadow: 0 0 0 var(--border-focus) var(--accent), var(--shadow-lg) var(--shadow-lg) 0 var(--black); }
+.gg-panel.framed { box-shadow: 0 0 0 var(--border-focus) var(--black), var(--shadow-lg) var(--shadow-lg) 0 var(--black); }
+.gg-head { background: var(--air-3); padding: 16px 16px 14px; box-shadow: 0 var(--edge) 0 var(--black); display: flex; align-items: center; gap: 14px; }
+.gg-body { padding: var(--panel-pad); display: flex; flex-direction: column; gap: var(--gap); }
+.gg-foot { background: var(--bg); padding: 9px 14px; box-shadow: 0 calc(-1 * var(--edge)) 0 var(--black); display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--code); font-size: 17px; line-height: 1; color: var(--text-soft); }
+
+/* the top bar: solid, full width, black edge underneath */
+.gg-bar { height: var(--bar-height); background: var(--surface); box-shadow: 0 var(--edge) 0 var(--black); display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 16px; }
+.gg-bar > * { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.gg-clock { font-family: var(--code); font-size: 28px; letter-spacing: 1px; color: var(--accent-hot); line-height: 1; }
+/* workspace cells: 12px squares; the active one is a light with a square halo */
+.gg-cells-ws { display: flex; gap: 7px; align-items: center; }
+.gg-cells-ws i { width: 12px; height: 12px; background: var(--stone); display: block; }
+.gg-cells-ws i.busy { background: var(--stone-lit); }
+.gg-cells-ws i.on { background: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); }
+
+/* ---------- rows and lists ---------- */
+.gg-group { font-family: var(--label); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); padding: 6px 4px 0; }
+.gg-row { background: var(--bg); box-shadow: inset 0 0 0 var(--border) var(--stone); padding: 9px 10px; display: flex; align-items: center; gap: 12px; min-width: 0; transition: box-shadow var(--press); }
+.gg-row:hover, .gg-row.selected { box-shadow: inset 0 0 0 var(--border-focus) var(--accent); }
+.gg-row > .gg-grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.gg-row .gg-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* status cell: unlit stone, or a light */
+.gg-dot { width: 12px; height: 12px; background: var(--stone); flex: none; }
+.gg-dot.on { background: var(--glow-1); animation: gg-breathe 1.4s steps(2, jump-none) infinite alternate; }
+.gg-dot.focal { background: var(--glow-2); animation: gg-breathe 1.4s steps(2, jump-none) infinite alternate; }
+.gg-dot.alert { background: var(--alert); animation: gg-breathe .8s steps(2, jump-none) infinite alternate; }
+.gg-pill { font-family: var(--label); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 8px; background: var(--accent); color: var(--ink); white-space: nowrap; }
+.gg-pill.ghost { background: transparent; color: var(--text-soft); box-shadow: inset 0 0 0 1px var(--stone); }
+
+/* ---------- controls ---------- */
+/* text button: hard 4px shadow; hover lifts 2px, press sinks into the shadow */
+.gg-btn { font-family: var(--label); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 8px 13px; border: 0; cursor: pointer;
+  background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px var(--stone), var(--shadow-md) var(--shadow-md) 0 var(--black); transition: transform var(--press), background-color var(--press), color var(--press); }
+.gg-btn.primary { background: var(--accent); color: var(--ink); box-shadow: 0 0 0 1px var(--black), var(--shadow-md) var(--shadow-md) 0 var(--black); }
+.gg-btn:hover { background: var(--accent); color: var(--ink); transform: translate(-2px, -2px); box-shadow: 0 0 0 1px var(--black), 6px 6px 0 var(--black); }
+.gg-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 1px var(--black), 2px 2px 0 var(--black); }
+.gg-btn:disabled { opacity: .45; cursor: default; transform: none; }
+/* icon button: 28px square holding a 14px (7x7 at 2px) icon */
+.gg-iconbtn { width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; cursor: pointer; background: var(--surface); color: var(--text-soft);
+  box-shadow: 0 0 0 1px var(--stone), var(--shadow-sm) var(--shadow-sm) 0 var(--black); transition: background-color var(--press), color var(--press); }
+.gg-iconbtn:hover { background: var(--accent); color: var(--ink); box-shadow: 0 0 0 1px var(--black), var(--shadow-sm) var(--shadow-sm) 0 var(--black); }
+.gg-iconbtn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 1px var(--black); }
+.gg-icon { width: 14px; height: 14px; display: block; fill: currentColor; shape-rendering: crispEdges; }
+
+/* switch: a square track and a square thumb. Markup: <label class="gg-switch"><input type="checkbox"><i></i></label> */
+.gg-switch { position: relative; display: inline-block; width: 44px; height: 22px; flex: none; cursor: pointer; }
+.gg-switch input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.gg-switch i { position: absolute; inset: 0; background: var(--stone); box-shadow: inset 0 0 0 2px var(--black); transition: background-color var(--toggle); }
+.gg-switch i::after { content: ""; position: absolute; top: 4px; left: 4px; width: 14px; height: 14px; background: var(--text-soft); transition: left var(--toggle), background-color var(--toggle); }
+.gg-switch input:checked + i { background: var(--accent); }
+.gg-switch input:checked + i::after { left: 26px; background: var(--ink); }
+.gg-switch.power { width: 64px; height: 32px; }
+.gg-switch.power i::after { width: 24px; height: 24px; }
+.gg-switch.power input:checked + i { background: var(--glow-1); }
+.gg-switch.power input:checked + i::after { left: 36px; }
+
+/* checkbox and radio: both are squares; a radio's mark is a smaller square */
+.gg-check { appearance: none; width: 16px; height: 16px; margin: 0; background: var(--bg); box-shadow: inset 0 0 0 2px var(--stone); display: inline-grid; place-items: center; cursor: pointer; flex: none; }
+.gg-check:checked { box-shadow: inset 0 0 0 2px var(--accent); }
+.gg-check:checked::after { content: ""; width: 8px; height: 8px; background: var(--accent); }
+
+.gg-input { font: inherit; color: var(--text); background: var(--bg); border: 0; padding: 8px 10px; box-shadow: inset 0 0 0 var(--border) var(--stone); min-width: 0; }
+.gg-input::placeholder { color: var(--text-soft); }
+.gg-input:focus { outline: none; box-shadow: inset 0 0 0 var(--border-focus) var(--accent); }
+.gg-input.value { font-family: var(--code); font-size: 19px; color: var(--accent-hot); }
+
+/* range slider: a stone track, an accent square thumb */
+.gg-range { appearance: none; height: 16px; background: transparent; cursor: pointer; }
+.gg-range::-webkit-slider-runnable-track { height: 6px; background: var(--stone); }
+.gg-range::-moz-range-track { height: 6px; background: var(--stone); }
+.gg-range::-webkit-slider-thumb { appearance: none; width: 12px; height: 16px; margin-top: -5px; background: var(--accent); border: 0; box-shadow: 2px 2px 0 var(--black); }
+.gg-range::-moz-range-thumb { width: 12px; height: 16px; background: var(--accent); border: 0; border-radius: 0; box-shadow: 2px 2px 0 var(--black); }
+
+/* tabs: a strip on bg; the active tab sits on the panel colour under a 3px accent bar */
+.gg-tabs { display: flex; background: var(--bg); box-shadow: 0 var(--edge) 0 var(--black); }
+.gg-tab { flex: 1; min-width: 0; font-family: var(--label); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 11px 4px 9px; background: transparent; border: 0;
+  border-top: 3px solid transparent; color: var(--text-soft); cursor: pointer; transition: color var(--press), background-color var(--press), border-color var(--press); }
+.gg-tab:hover { color: var(--text); }
+.gg-tab[aria-selected="true"], .gg-tab.active { background: var(--surface); color: var(--accent-hot); border-top-color: var(--accent); }
+.gg-tab .gg-count { font-family: var(--code); font-size: 16px; letter-spacing: 0; color: var(--text-soft); margin-left: 4px; }
+
+/* ---------- feedback ---------- */
+/* progress as cells, never a smooth bar. Markup: <div class="gg-cells"><i class="full"></i>...<i></i></div> */
+.gg-cells { display: flex; gap: 2px; height: 8px; }
+.gg-cells i { flex: 1; background: var(--stone); transition: background-color var(--toggle); }
+.gg-cells i.full { background: var(--accent); } .gg-cells i.done { background: var(--glow-1); } .gg-cells i.failed { background: var(--alert); }
+
+/* loading: an 8-cell spark chase at 12 frames a second. Markup: <div class="gg-spinner"><i></i> x8</div> */
+.gg-spinner { display: inline-flex; gap: 2px; }
+.gg-spinner i { width: 6px; height: 6px; background: var(--stone); animation: gg-chase .667s steps(1) infinite; }
+.gg-spinner i:nth-child(2) { animation-delay: .083s; } .gg-spinner i:nth-child(3) { animation-delay: .167s; } .gg-spinner i:nth-child(4) { animation-delay: .25s; }
+.gg-spinner i:nth-child(5) { animation-delay: .333s; } .gg-spinner i:nth-child(6) { animation-delay: .417s; } .gg-spinner i:nth-child(7) { animation-delay: .5s; } .gg-spinner i:nth-child(8) { animation-delay: .583s; }
+@keyframes gg-chase { 0% { background: var(--accent-hot); } 12.5% { background: var(--accent); } 25%, 100% { background: var(--stone); } }
+
+/* meter: columns of square cells, stepped, never a smooth line */
+.gg-meter { display: flex; align-items: flex-end; gap: 2px; height: 46px; }
+.gg-meter i { width: 6px; background: var(--accent); display: block; }
+
+.gg-toast { background: var(--surface); box-shadow: 0 0 0 var(--border-focus) var(--stone), 6px 6px 0 var(--black); padding: 10px 12px; display: flex; gap: 10px; align-items: flex-start; }
+.gg-dropzone { background: var(--bg); padding: 22px 12px; text-align: center; color: var(--text-soft); outline: 2px dashed var(--stone); outline-offset: -2px; }
+.gg-dropzone.over { outline-color: var(--glow-1); }
+
+.gg-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.gg-table th { font-family: var(--label); font-weight: 400; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-align: left; background: var(--air-3); color: var(--accent); padding: 10px 12px; }
+.gg-table td { padding: 10px 12px; border-bottom: 1px solid var(--stone); vertical-align: top; }
+
+/* terminal block: bg, VT323, a 1 Hz block cursor */
+.gg-term { background: var(--bg); color: var(--text); font-family: var(--code); font-size: 20px; line-height: 1.12; padding: 14px 16px; white-space: pre; overflow-x: auto; box-shadow: inset 0 0 0 1px var(--stone); }
+.gg-cursor { display: inline-block; width: .55em; height: 1em; background: var(--accent); vertical-align: -2px; animation: gg-blink 1s steps(1) infinite; }
+
+/* a window frame: the focused one wears the accent ring */
+.gg-window { background: var(--bg); box-shadow: 0 0 0 var(--border-focus) var(--stone), var(--shadow-lg) var(--shadow-lg) 0 var(--black); }
+.gg-window.focused { box-shadow: 0 0 0 var(--ring) var(--accent), var(--shadow-lg) var(--shadow-lg) 0 var(--black); }
+
+/* sub-heading marker: an accent square with a hard shadow */
+.gg-heading { font-family: var(--display); font-weight: 700; font-size: 22px; margin: 0; display: flex; align-items: center; gap: 12px; color: var(--text); }
+.gg-heading::before { content: ""; width: 10px; height: 10px; background: var(--accent); box-shadow: 3px 3px 0 var(--black); flex: none; }
+
+.gg :focus-visible { outline: 2px solid var(--glow-3); outline-offset: 2px; }
+
+/* ---------- motion ---------- */
+@keyframes gg-breathe { from { opacity: 1; } to { opacity: .55; } }
+@keyframes gg-blink { 50% { opacity: 0; } }
+@keyframes gg-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* add .gg-fresh to a list for one opening: its rows rise in, 30ms apart */
+.gg-fresh > * { animation: gg-rise 200ms steps(5) both; }
+.gg-fresh > :nth-child(2) { animation-delay: 30ms; } .gg-fresh > :nth-child(3) { animation-delay: 60ms; } .gg-fresh > :nth-child(4) { animation-delay: 90ms; }
+.gg-fresh > :nth-child(5) { animation-delay: 120ms; } .gg-fresh > :nth-child(6) { animation-delay: 150ms; } .gg-fresh > :nth-child(n+7) { animation-delay: 180ms; }
+@media (prefers-reduced-motion: reduce) { .gg *, .gg *::after { animation: none !important; transition: none !important; } }
+
+/* =====================================================================================
+   MOTION PRIMITIVES
+   Every animation in the kit is one of these. Add the class to play it once; remove and
+   re-add it (or call ggReplay(el) from glowgrid-ui.js) to play it again. All of them move
+   in held steps and finish within 400 ms, except the three ambient loops.
+   ===================================================================================== */
+@property --gg-f { syntax: "<percentage>"; inherits: false; initial-value: 100%; }
+@keyframes gg-drop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes gg-lift-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-8px); } }
+@keyframes gg-slide-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+@keyframes gg-slide-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(16px); } }
+@keyframes gg-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes gg-assemble { from { --gg-f: 0%; } to { --gg-f: 100%; } }
+@keyframes gg-flash { 0% { background-color: var(--accent); color: var(--ink); } 100% { } }
+@keyframes gg-shake { 0%, 100% { transform: none; } 25% { transform: translateX(-4px); } 50% { transform: translateX(4px); } 75% { transform: translateX(-2px); } }
+@keyframes gg-type { from { width: 0; } }
+@keyframes gg-scan { from { background-position: -100% 0; } to { background-position: 200% 0; } }
+@keyframes gg-fill { from { transform: scaleX(0); } }
+@keyframes gg-grow { from { transform: scaleY(0); } }
+
+.gg-m-rise     { animation: gg-rise 200ms steps(5) both; }       /* list rows, cards entering */
+.gg-m-drop     { animation: gg-drop 180ms steps(4) both; }       /* menus, popovers, panels from a bar */
+.gg-m-lift-out { animation: gg-lift-out 120ms steps(3) both; }   /* the same things leaving */
+.gg-m-slide    { animation: gg-slide-in 180ms steps(4) both; }   /* toasts, drawers, tab pages */
+.gg-m-slide-out{ animation: gg-slide-out 120ms steps(3) both; }
+.gg-m-wipe     { animation: gg-wipe 400ms steps(8) both; }       /* reveals: headings, images, banners */
+/* cells grow until they tile the surface: windows, dialogs, hero art */
+.gg-m-assemble { animation: gg-assemble 280ms steps(7) both;
+  -webkit-mask-image: linear-gradient(90deg, #000 var(--gg-f), transparent 0), linear-gradient(#000 var(--gg-f), transparent 0); /* glowgrid-allow */
+          mask-image: linear-gradient(90deg, #000 var(--gg-f), transparent 0), linear-gradient(#000 var(--gg-f), transparent 0); /* glowgrid-allow */
+  -webkit-mask-size: 24px 24px; mask-size: 24px 24px; -webkit-mask-composite: source-in; mask-composite: intersect; }
+.gg-m-flash    { animation: gg-flash 166ms steps(1) both; }      /* a value just changed */
+.gg-m-shake    { animation: gg-shake 240ms steps(4) both; }      /* rejected input */
+.gg-m-type     { display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; width: calc(var(--chars, 20) * 1ch); animation: gg-type calc(var(--chars, 20) * 100ms) steps(var(--chars, 20)) both; } /* glowgrid-allow: 10 characters a second */
+.gg-m-breathe  { animation: gg-breathe 1.4s steps(2, jump-none) infinite alternate; }  /* ambient: a lit status */
+.gg-m-blink    { animation: gg-blink 1s steps(1) infinite; }                          /* ambient: cursors */
+
+/* =====================================================================================
+   MORE COMPONENTS
+   ===================================================================================== */
+
+/* ---------- actions ---------- */
+.gg-btn.ghost { background: transparent; color: var(--accent-hot); box-shadow: inset 0 0 0 2px var(--accent-hot), var(--shadow-md) var(--shadow-md) 0 var(--black); }
+.gg-btn.danger { background: var(--alert); color: var(--ink); box-shadow: 0 0 0 1px var(--black), var(--shadow-md) var(--shadow-md) 0 var(--black); }
+.gg-btn.busy { pointer-events: none; color: transparent; position: relative; }
+.gg-btn.busy::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -24px; background: var(--ink);
+  box-shadow: 8px 0 0 var(--ink), 16px 0 0 var(--ink), 24px 0 0 var(--ink), 32px 0 0 var(--ink), 40px 0 0 var(--ink); animation: gg-busy .5s steps(1) infinite; }
+@keyframes gg-busy { 0% { clip-path: inset(0 -34px 0 0); } 20% { clip-path: inset(0 -26px 0 8px); } 40% { clip-path: inset(0 -18px 0 16px); } 60% { clip-path: inset(0 -10px 0 24px); } 80% { clip-path: inset(0 -2px 0 32px); } 100% { clip-path: inset(0 -46px 0 40px); } }
+.gg-link { color: var(--glow-3); text-decoration: none; box-shadow: inset 0 -2px 0 var(--glow-3); transition: background-color var(--press), color var(--press); }
+.gg-link:hover { background: var(--glow-3); color: var(--ink); }
+/* segmented control: joined cells, one lit. Markup: <div class="gg-segment"><button aria-pressed="true">A</button><button>B</button></div> */
+.gg-segment { display: inline-flex; box-shadow: 0 0 0 1px var(--stone), var(--shadow-md) var(--shadow-md) 0 var(--black); }
+.gg-segment button { font-family: var(--label); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 8px 12px; border: 0; background: var(--surface); color: var(--text-soft); cursor: pointer; transition: background-color var(--press), color var(--press); }
+.gg-segment button + button { box-shadow: -1px 0 0 var(--stone); }
+.gg-segment button:hover { color: var(--text); }
+.gg-segment button[aria-pressed="true"] { background: var(--accent); color: var(--ink); }
+
+/* ---------- inputs ---------- */
+textarea.gg-input { min-height: 72px; resize: vertical; line-height: 1.45; }
+select.gg-input { appearance: none; padding-right: 30px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-soft) 50%), linear-gradient(-45deg, transparent 50%, var(--text-soft) 50%); /* glowgrid-allow: the arrow */
+  background-size: 6px 6px; background-position: calc(100% - 15px) 55%, calc(100% - 9px) 55%; background-repeat: no-repeat; }
+/* a labelled field. Add .invalid to show the error and shake once. */
+.gg-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.gg-field > .gg-error { display: none; font-size: 12.5px; color: var(--alert); }
+.gg-field.invalid > .gg-input { box-shadow: inset 0 0 0 var(--border-focus) var(--alert); animation: gg-shake 240ms steps(4); }
+.gg-field.invalid > .gg-error { display: block; }
+/* number stepper: [-] value [+] */
+.gg-stepper { display: inline-flex; align-items: stretch; box-shadow: inset 0 0 0 1px var(--stone); background: var(--bg); }
+.gg-stepper button { width: 28px; border: 0; background: var(--surface); color: var(--text-soft); cursor: pointer; display: grid; place-items: center; transition: background-color var(--press), color var(--press); }
+.gg-stepper button:hover { background: var(--accent); color: var(--ink); }
+.gg-stepper output { min-width: 44px; padding: 5px 8px; text-align: center; font-family: var(--code); font-size: 19px; line-height: 1; color: var(--accent-hot); }
+/* removable tag */
+.gg-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 4px 4px 8px; background: var(--air-5); font-size: 12.5px; }
+.gg-chip button { width: 16px; height: 16px; border: 0; padding: 0; background: var(--stone); color: var(--text); cursor: pointer; display: grid; place-items: center; }
+.gg-chip button:hover { background: var(--alert); color: var(--ink); }
+
+/* ---------- navigation ---------- */
+.gg-nav { display: flex; flex-direction: column; gap: 2px; background: var(--air-3); padding: 8px; min-width: 0; }
+.gg-nav a, .gg-nav button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; background: transparent; color: var(--text-soft); font: inherit; text-align: left; text-decoration: none; cursor: pointer; box-shadow: inset 0 0 0 0 var(--accent); transition: box-shadow var(--press), color var(--press), background-color var(--press); }
+.gg-nav a:hover, .gg-nav button:hover { color: var(--text); background: var(--air-5); }
+.gg-nav [aria-current="page"], .gg-nav .active { color: var(--accent-hot); background: var(--surface); box-shadow: inset 3px 0 0 0 var(--accent); }
+.gg-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--label); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); }
+.gg-crumbs a { color: var(--text-soft); text-decoration: none; } .gg-crumbs a:hover { color: var(--accent-hot); }
+.gg-crumbs > * + *::before { content: ""; display: inline-block; width: 4px; height: 4px; background: var(--stone-lit); margin-right: 8px; vertical-align: 2px; }
+.gg-crumbs > :last-child { color: var(--text); }
+.gg-pager { display: inline-flex; gap: 4px; }
+.gg-pager button { min-width: 28px; height: 28px; border: 0; background: var(--surface); color: var(--text-soft); font-family: var(--code); font-size: 18px; line-height: 1; cursor: pointer; box-shadow: inset 0 0 0 1px var(--stone); transition: background-color var(--press), color var(--press); }
+.gg-pager button:hover { color: var(--text); box-shadow: inset 0 0 0 2px var(--accent); }
+.gg-pager button[aria-current="page"] { background: var(--accent); color: var(--ink); box-shadow: none; }
+/* wizard steps: cells joined by a line; done = glow-1, current = accent */
+.gg-steps { display: flex; align-items: center; gap: 0; }
+.gg-steps i { width: 12px; height: 12px; background: var(--stone); flex: none; }
+.gg-steps i.done { background: var(--glow-1); } .gg-steps i.now { background: var(--accent); animation: gg-breathe 1.4s steps(2, jump-none) infinite alternate; }
+.gg-steps i + i { margin-left: 28px; position: relative; }
+.gg-steps i + i::before { content: ""; position: absolute; right: 100%; top: 5px; width: 28px; height: 2px; background: var(--stone); }
+.gg-steps i.done + i::before { background: var(--glow-1); }
+/* menu: a lit popover of rows. Enters with gg-m-drop. */
+.gg-menu { background: var(--surface); box-shadow: 0 0 0 var(--border-focus) var(--accent), 6px 6px 0 var(--black); padding: 4px; display: flex; flex-direction: column; min-width: 180px; }
+.gg-menu button, .gg-menu a { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 7px 10px; border: 0; background: transparent; color: var(--text); font: inherit; text-align: left; text-decoration: none; cursor: pointer; }
+.gg-menu button:hover, .gg-menu a:hover, .gg-menu .active { background: var(--accent); color: var(--ink); }
+.gg-menu hr { border: 0; height: 1px; background: var(--stone); margin: 4px 0; width: 100%; }
+.gg-kbd { font-family: var(--code); font-size: 16px; line-height: 1; padding: 2px 6px 3px; background: var(--bg); color: var(--text-soft); box-shadow: inset 0 0 0 1px var(--stone), 2px 2px 0 var(--black); }
+/* launcher / command palette */
+.gg-launcher { background: var(--surface); box-shadow: 0 0 0 var(--ring) var(--accent), var(--shadow-lg) var(--shadow-lg) 0 var(--black); display: flex; flex-direction: column; min-width: 0; }
+.gg-launcher > input { font-family: var(--code); font-size: 26px; padding: 12px 16px; background: var(--air-3); color: var(--accent-hot); border: 0; box-shadow: 0 var(--edge) 0 var(--black); outline: none; min-width: 0; }
+.gg-launcher > ul { list-style: none; margin: 0; padding: 8px; display: flex; flex-direction: column; gap: 2px; }
+.gg-launcher li { display: flex; align-items: center; gap: 12px; padding: 8px 10px; }
+.gg-launcher li.active { background: var(--accent); color: var(--ink); font-weight: 600; }
+.gg-launcher li small { margin-left: auto; font-family: var(--label); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+
+/* ---------- containers ---------- */
+.gg-card { background: var(--surface); padding: 18px 20px; box-shadow: var(--shadow-lg) var(--shadow-lg) 0 var(--black); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.gg-card.interactive { cursor: pointer; transition: transform var(--press), box-shadow var(--press); }
+.gg-card.interactive:hover { transform: translate(-2px, -2px); box-shadow: 0 0 0 2px var(--accent), 10px 10px 0 var(--black); }
+.gg-card.interactive:active { transform: translate(4px, 4px); box-shadow: 0 0 0 2px var(--accent), 4px 4px 0 var(--black); }
+.gg-divider { border: 0; height: 2px; background: var(--stone); margin: 0; }
+.gg-divider.dashed { height: 2px; background: repeating-linear-gradient(90deg, var(--stone) 0 8px, transparent 8px 16px); }
+/* scrim behind dialogs: a 2px checker of black, not a blur */
+.gg-scrim { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px;
+  background: repeating-conic-gradient(#000 0 25%, transparent 0 50%) 0 0 / 4px 4px, color-mix(in srgb, var(--bg) 70%, transparent); /* glowgrid-allow: dither */ }
+.gg-scrim[hidden] { display: none; }
+.gg-dialog { background: var(--surface); box-shadow: 0 0 0 var(--ring) var(--accent), var(--shadow-lg) var(--shadow-lg) 0 var(--black); width: min(100%, 420px); display: flex; flex-direction: column; }
+.gg-dialog > header { background: var(--air-3); padding: 14px 16px; box-shadow: 0 var(--edge) 0 var(--black); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gg-dialog > .gg-body { padding: 16px; }
+.gg-dialog > footer { display: flex; justify-content: flex-end; gap: 12px; padding: 4px 16px 20px; }
+/* drawer: a panel fixed to the right edge. Enters with gg-m-slide. */
+.gg-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 41; width: min(100%, 340px); background: var(--surface); box-shadow: -2px 0 0 var(--accent), -10px 0 0 var(--black); display: flex; flex-direction: column; }
+.gg-drawer[hidden] { display: none; }
+.gg-tooltip { position: relative; }
+.gg-tooltip::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); white-space: nowrap; pointer-events: none;
+  background: var(--bg); color: var(--text); font-family: var(--body); font-size: 12.5px; letter-spacing: 0; text-transform: none; padding: 4px 8px; box-shadow: 0 0 0 1px var(--accent), 3px 3px 0 var(--black); opacity: 0; transition: opacity var(--press); z-index: 5; }
+.gg-tooltip:hover::after, .gg-tooltip:focus-visible::after { opacity: 1; }
+/* accordion: native <details>. The marker is a cell that lights when open; the content rises in. */
+.gg-accordion { background: var(--bg); box-shadow: inset 0 0 0 1px var(--stone); }
+.gg-accordion > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; transition: color var(--press); }
+.gg-accordion > summary::-webkit-details-marker { display: none; }
+.gg-accordion > summary::before { content: ""; width: 8px; height: 8px; background: var(--stone); flex: none; transition: background-color var(--toggle); }
+.gg-accordion[open] > summary { color: var(--accent-hot); box-shadow: 0 1px 0 var(--stone); }
+.gg-accordion[open] > summary::before { background: var(--accent); }
+.gg-accordion > :not(summary) { padding: 10px 12px 12px 30px; color: #bfb0c9; animation: gg-rise 200ms steps(5) both; }
+
+/* ---------- feedback ---------- */
+.gg-banner { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; background: var(--bg); box-shadow: inset 4px 0 0 var(--glow-3), inset 0 0 0 1px var(--stone); }
+.gg-banner.good { box-shadow: inset 4px 0 0 var(--glow-1), inset 0 0 0 1px var(--stone); }
+.gg-banner.warn { box-shadow: inset 4px 0 0 var(--accent), inset 0 0 0 1px var(--stone); }
+.gg-banner.bad { box-shadow: inset 4px 0 0 var(--alert), inset 0 0 0 1px var(--stone); }
+.gg-badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 4px; background: var(--accent); color: var(--ink); font-family: var(--code); font-size: 16px; line-height: 1; }
+.gg-badge.quiet { background: var(--stone); color: var(--text); }
+/* skeleton: unlit cells with one lit cell scanning across, 12 frames a second */
+.gg-skeleton { height: 12px; background: linear-gradient(90deg, var(--accent) 0 12px, transparent 0) no-repeat, repeating-linear-gradient(90deg, var(--stone) 0 12px, transparent 12px 14px); /* glowgrid-allow: cells */
+  background-size: 14px 100%, auto; animation: gg-scan 1s steps(12) infinite; }
+.gg-empty { display: grid; place-items: center; text-align: center; gap: 8px; padding: 28px 20px; color: var(--text-soft); }
+.gg-empty .gg-display { font-size: 20px; color: var(--text); }
+/* toast stack, top right. Toasts enter with gg-m-slide and leave with gg-m-slide-out. */
+.gg-toasts { position: fixed; top: 16px; right: 16px; z-index: 50; display: flex; flex-direction: column; gap: 12px; width: min(340px, calc(100% - 32px)); pointer-events: none; }
+.gg-toasts > * { pointer-events: auto; }
+/* on-screen display: volume, brightness. A lit panel with a cell bar. */
+.gg-osd { display: inline-flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface); box-shadow: 0 0 0 var(--border-focus) var(--accent), 6px 6px 0 var(--black); }
+.gg-osd .gg-cells { width: 180px; height: 10px; }
+/* determinate bar that fills in steps when it appears */
+.gg-bar-fill { height: 10px; background: var(--stone); }
+.gg-bar-fill > i { display: block; height: 100%; background: var(--accent); transform-origin: left; animation: gg-fill 400ms steps(8) both; }
+
+/* ---------- data ---------- */
+.gg-stat { background: var(--surface); padding: 14px 16px; box-shadow: var(--shadow-lg) var(--shadow-lg) 0 var(--black); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.gg-stat .gg-value { font-size: 40px; color: var(--accent-hot); }
+.gg-stat .gg-delta { font-family: var(--code); font-size: 17px; line-height: 1; color: var(--glow-1); } .gg-stat .gg-delta.down { color: var(--alert); }
+.gg-kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; align-items: baseline; margin: 0; }
+.gg-kv dt { font-family: var(--label); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); }
+.gg-kv dd { margin: 0; font-family: var(--code); font-size: 18px; line-height: 1; color: var(--text); }
+/* bar chart: columns grow from the baseline in steps */
+.gg-bars { display: flex; align-items: flex-end; gap: 4px; height: 96px; box-shadow: inset 0 -2px 0 var(--stone); padding-bottom: 2px; }
+.gg-bars i { flex: 1; background: var(--accent); transform-origin: bottom; animation: gg-grow 400ms steps(8) both; }
+.gg-bars i.cold { background: var(--glow-3); } .gg-bars i.peak { background: var(--accent-hot); }
+.gg-bars i:nth-child(2) { animation-delay: 30ms; } .gg-bars i:nth-child(3) { animation-delay: 60ms; } .gg-bars i:nth-child(4) { animation-delay: 90ms; } .gg-bars i:nth-child(5) { animation-delay: 120ms; }
+.gg-bars i:nth-child(6) { animation-delay: 150ms; } .gg-bars i:nth-child(7) { animation-delay: 180ms; } .gg-bars i:nth-child(n+8) { animation-delay: 210ms; }
+.gg-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.gg-calendar b { font-family: var(--label); font-weight: 400; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-soft); padding: 4px 0; }
+.gg-calendar span { font-family: var(--code); font-size: 18px; line-height: 1; padding: 5px 0; color: var(--text); }
+.gg-calendar span.out { color: var(--stone-lit); } .gg-calendar span.today { background: var(--accent); color: var(--ink); }
+.gg-avatar { width: 32px; height: 32px; display: inline-grid; place-items: center; background: var(--air-5); color: var(--accent-hot); font-family: var(--display); font-weight: 700; font-size: 16px; box-shadow: 3px 3px 0 var(--black); flex: none; }
+/* timeline: cells down a rail */
+.gg-timeline { list-style: none; margin: 0; padding: 0 0 0 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 2px 0 0 var(--stone); margin-left: 5px; }
+.gg-timeline li { position: relative; }
+.gg-timeline li::before { content: ""; position: absolute; left: -27px; top: 4px; width: 12px; height: 12px; background: var(--stone); }
+.gg-timeline li.done::before { background: var(--glow-1); } .gg-timeline li.now::before { background: var(--accent); animation: gg-breathe 1.4s steps(2, jump-none) infinite alternate; }
+
+/* ---------- desktop pieces ---------- */
+.gg-login { display: inline-flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); box-shadow: 0 0 0 2px var(--stone), var(--shadow-lg) var(--shadow-lg) 0 var(--black); }
+.gg-login .gg-pins { display: flex; gap: 6px; } .gg-login .gg-pins i { width: 10px; height: 10px; background: var(--stone); } .gg-login .gg-pins i.set { background: var(--accent); }
+.gg-bigclock { font-family: var(--display); font-weight: 700; font-size: clamp(64px, 14vw, 128px); line-height: .85; color: var(--accent-hot); text-shadow: 8px 8px 0 var(--title-shadow); }

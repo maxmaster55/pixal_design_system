@@ -1,0 +1,139 @@
+/* Glowgrid for GTK 4. Load one kit/gtk4/tokens-<theme>.css first, then this file:
+
+     let css = gtk::CssProvider::new();
+     css.load_from_string(&format!("{}{}", TOKENS_EMBER, GLOWGRID));   // or load_from_path twice
+     gtk::style_context_add_provider_for_display(&display, &css, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+   Add the class "glowgrid" to your window. A transparent window with a ".panel.shadowed" child
+   gets the hard offset shadow; add "plain" to the window for an ordinary opaque one.
+
+   Classes (the same vocabulary as kit/web, without the gg- prefix because GTK scopes by window):
+     .panel .head .state .sub .tabs button.tab .count .page .group .row(.me) .dot(.on|.exit)
+     .name .tag .addr(.dim) .hint button.icon button.text(.primary) .pill .dropzone .cell(.full|.done|.failed)
+     .meta .message .foot .toast(.bad) .spark(.warm|.hot)   and GtkSwitch, plus switch.power
+   Reference app using all of them: https://github.com/maxmaster55/pixelscale
+
+   GTK notes: letter-spaced labels must not be ellipsised (Pango measures them too narrow);
+   icons are 7x7 bitmaps drawn in a DrawingArea in the widget's colour (kit/icons/icons.json). */
+* { border-radius: 0; box-shadow: none; text-shadow: none; outline-offset: 0; -gtk-icon-shadow: none; }
+
+window.glowgrid { background: transparent; color: @gg_text; font-family: "IBM Plex Sans", "Noto Sans", sans-serif; font-size: 14px; }
+window.glowgrid.plain { background: @gg_surface; }
+
+.panel { background: @gg_surface; border: 2px solid @gg_accent; }
+.shadowed { margin: 0 8px 8px 0; box-shadow: 8px 8px 0 0 @gg_black; }
+
+.head { background: @gg_air_3; padding: 16px 16px 14px 16px; border-bottom: 2px solid @gg_black; }
+.state { font-family: "Pixelify Sans", "Silkscreen", monospace; font-weight: 700; font-size: 26px; color: @gg_glow_1; }
+.state.off { color: @gg_stone_lit; }
+.state.warn { color: @gg_alert; }
+.sub { font-family: "VT323", monospace; font-size: 19px; color: @gg_text_soft; }
+
+/* switches: a square track and a square thumb */
+switch { background: @gg_stone; border: 2px solid @gg_black; min-width: 40px; min-height: 18px; padding: 2px; }
+switch:checked { background: @gg_accent; }
+switch slider { background: @gg_text_soft; min-width: 14px; min-height: 14px; border: none; margin: 0; }
+switch:checked slider { background: @gg_ink; }
+switch:disabled { opacity: 0.5; }
+switch.power { min-width: 60px; min-height: 26px; }
+switch.power slider { min-width: 24px; min-height: 22px; }
+switch.power:checked { background: @gg_glow_1; }
+switch:focus-visible, button:focus-visible { outline: 2px solid @gg_glow_3; }
+
+.tabs { background: @gg_bg; border-bottom: 2px solid @gg_black; }
+button.tab { background: transparent; color: @gg_text_soft; border: none; border-top: 3px solid transparent; padding: 10px 4px 9px 4px;
+  font-family: "Silkscreen", "Pixelify Sans", monospace; font-size: 10.5px; letter-spacing: 1.3px; min-height: 0; }
+button.tab:hover { color: @gg_text; }
+button.tab:checked { background: @gg_surface; color: @gg_accent_hot; border-top-color: @gg_accent; }
+button.tab:disabled { opacity: 0.45; }
+.count { font-family: "VT323", monospace; font-size: 16px; letter-spacing: 0; color: @gg_text_soft; }
+
+.page { padding: 12px; }
+scrolledwindow, viewport, stack, list, .page { background: transparent; }
+scrollbar { background: transparent; border: none; }
+scrollbar slider { background: @gg_stone; min-width: 6px; min-height: 24px; border: none; margin: 2px; }
+scrollbar slider:hover { background: @gg_stone_lit; }
+
+.group { font-family: "Silkscreen", monospace; font-size: 10px; letter-spacing: 1.6px; color: @gg_accent; padding: 6px 4px 0 4px; }
+.row { background: @gg_bg; border: 1px solid @gg_stone; padding: 9px 10px; }
+.row:hover, .row.me { border: 2px solid @gg_accent; padding: 8px 9px; }
+.row.drop-over { border: 2px solid @gg_glow_1; padding: 8px 9px; }
+.dot { background: @gg_stone; min-width: 12px; min-height: 12px; }
+.dot.on { background: @gg_glow_1; }
+.dot.exit { background: @gg_glow_2; }
+.name { font-weight: 600; font-size: 14.5px; }
+.tag { font-family: "Silkscreen", monospace; font-size: 9.5px; letter-spacing: 1.2px; color: @gg_text_soft; }
+.tag.me { color: @gg_accent; }
+.addr { font-family: "VT323", monospace; font-size: 18px; color: @gg_glow_3; }
+.addr.dim { color: @gg_text_soft; }
+.hint { font-size: 12.5px; color: @gg_text_soft; }
+
+button.icon { background: @gg_surface; color: @gg_text_soft; border: 1px solid @gg_stone; min-width: 26px; min-height: 26px; padding: 0;
+  margin: 0 3px 3px 0; box-shadow: 3px 3px 0 0 @gg_black; }
+button.icon:hover { background: @gg_accent; color: @gg_ink; border-color: @gg_black; }
+button.icon:active { margin: 3px 0 0 3px; box-shadow: none; }
+button.icon:disabled { opacity: 0.4; }
+
+button.text { font-family: "Silkscreen", monospace; font-size: 10.5px; letter-spacing: 1.2px; padding: 7px 12px; min-height: 0;
+  background: @gg_surface; color: @gg_text; border: 1px solid @gg_stone; margin: 0 4px 4px 0; box-shadow: 4px 4px 0 0 @gg_black; }
+button.text:hover { background: @gg_accent; color: @gg_ink; border-color: @gg_black; }
+button.text:active { margin: 4px 0 0 4px; box-shadow: none; }
+button.text.primary { background: @gg_accent; color: @gg_ink; border-color: @gg_black; }
+button.text:disabled { opacity: 0.45; }
+.pill { font-family: "Silkscreen", monospace; font-size: 9.5px; letter-spacing: 1.2px; padding: 5px 8px; background: @gg_accent; color: @gg_ink; }
+
+.dropzone { background: @gg_bg; border: 2px dashed @gg_stone; padding: 20px 12px; color: @gg_text_soft; }
+.dropzone.drop-over { border-color: @gg_glow_1; }
+.dropzone .big { font-family: "Pixelify Sans", monospace; font-weight: 600; font-size: 18px; color: @gg_text; }
+.cell { background: @gg_stone; min-height: 8px; }
+.cell.full { background: @gg_accent; }
+.cell.done { background: @gg_glow_1; }
+.cell.failed { background: @gg_alert; }
+.meta { font-family: "VT323", monospace; font-size: 17px; color: @gg_text_soft; }
+
+dropdown > button { background: @gg_bg; color: @gg_text; border: 1px solid @gg_stone; padding: 6px 10px; min-height: 0; }
+dropdown > button:hover { border-color: @gg_accent; }
+popover > contents { background: @gg_surface; border: 2px solid @gg_accent; padding: 4px; color: @gg_text; }
+popover > arrow { background: transparent; border: none; }
+popover listview > row { padding: 6px 10px; }
+popover listview > row:selected, popover listview > row:hover { background: @gg_accent; color: @gg_ink; }
+
+.message { padding: 28px 20px; color: @gg_text_soft; }
+.message .big { font-family: "Pixelify Sans", monospace; font-weight: 600; font-size: 20px; color: @gg_text; }
+
+.foot { background: @gg_bg; border-top: 2px solid @gg_black; padding: 9px 14px; font-family: "VT323", monospace; font-size: 17px; color: @gg_text_soft; }
+.toast { color: @gg_glow_1; }
+.toast.bad { color: @gg_alert; }
+.good { color: @gg_glow_1; }
+
+/* ---- motion: short, and in held steps rather than smooth tweens ---- */
+switch { transition: background-color 120ms steps(3); }
+switch slider { transition: background-color 120ms steps(3); }
+.row { transition: border-color 80ms steps(2); }
+button.tab { transition: color 80ms steps(2), border-color 80ms steps(2), background-color 80ms steps(2); }
+button.icon, button.text { transition: background-color 80ms steps(2), color 80ms steps(2); }
+.cell { transition: background-color 120ms steps(2); }
+
+/* lights breathe: two held levels, like a pixel-art glow */
+@keyframes breathe { from { opacity: 1; } to { opacity: 0.55; } }
+.dot.on, .dot.exit { animation: breathe 1.4s steps(2, jump-none) infinite alternate; }
+.state.warn { animation: breathe 0.8s steps(2, jump-none) infinite alternate; }
+
+/* rows rise into place when the panel opens, one after another */
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.fresh .row, .fresh .group, .fresh .dropzone { animation: rise 200ms steps(5) both; }
+.fresh .page > :nth-child(2) { animation-delay: 30ms; }
+.fresh .page > :nth-child(3) { animation-delay: 60ms; }
+.fresh .page > :nth-child(4) { animation-delay: 90ms; }
+.fresh .page > :nth-child(5) { animation-delay: 120ms; }
+.fresh .page > :nth-child(6) { animation-delay: 150ms; }
+.fresh .page > :nth-child(7) { animation-delay: 180ms; }
+.fresh .page > :nth-child(8) { animation-delay: 210ms; }
+.fresh .page > :nth-child(n+9) { animation-delay: 240ms; }
+
+/* the spark chase in the footer */
+.spark { background: @gg_stone; min-width: 6px; min-height: 6px; }
+.spark.warm { background: @gg_accent; }
+.spark.hot { background: @gg_accent_hot; }
+tooltip { background: @gg_bg; border: 1px solid @gg_accent; color: @gg_text; padding: 4px 8px; }
+tooltip label { font-size: 12.5px; }
