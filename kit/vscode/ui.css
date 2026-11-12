@@ -40,14 +40,15 @@
 /*@end*/
 
 /*@labels*/
-/* labels: Silkscreen, upper case, spaced, for section titles */
+/* labels: Silkscreen, upper case, spaced, for section titles (never icon buttons, which
+   are drawn with an icon font) */
 .monaco-workbench .part > .title > .title-label h2,
 .monaco-workbench .part > .composite.title h2,
 .monaco-workbench .pane-header .title,
-.monaco-workbench .panel .composite.title .action-label,
-.monaco-workbench .part.panel > .title .action-label,
-.monaco-workbench .part.auxiliarybar > .title .action-label,
-.monaco-workbench .part.sidebar > .title .action-label {
+.monaco-workbench .panel .composite.title .action-label:not(.codicon),
+.monaco-workbench .part.panel > .title .action-label:not(.codicon),
+.monaco-workbench .part.auxiliarybar > .title .action-label:not(.codicon),
+.monaco-workbench .part.sidebar > .title .action-label:not(.codicon) {
   font-family: "Silkscreen", "Pixelify Sans", monospace !important; font-size: 10.5px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; font-weight: 400 !important; }
 /* values: the status bar is numbers and names of things, so VT323 */
 .monaco-workbench .part.statusbar, .monaco-workbench .part.statusbar .statusbar-item,
