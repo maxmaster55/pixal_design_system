@@ -17,6 +17,10 @@ Open [`docs/themes.html`](docs/themes.html) in a browser to see them live, and [
 
 ## UI kit: apply the style to an interface, fast
 
+![A desktop in the Glowgrid style: a pixel clock, system meters built from cells, weather and a calendar over a night ridge lit by one beacon](docs/images/desktop.png)
+
+<sub>A whole desktop built with the kit: bar, widgets and an animated background on one pixel grid. Frost theme.</sub>
+
 Besides the art engine, the repo carries a kit for screen interfaces (apps, bars, panels,
 desktops) with about 60 components, each with defined motion.
 
@@ -30,12 +34,28 @@ desktops) with about 60 components, each with defined motion.
 | [`tools/check.py`](tools/check.py) | Checks any files against the rules: corners, shadows, gradients, off-palette colours, fonts, motion. |
 | [`tools/build_tokens.py`](tools/build_tokens.py) | Regenerates every platform's token file from `tokens.json`. |
 
+### Motion
+
+Things that travel ride springs and are drawn on the 2 px grid; colour and opacity change in held steps.
+
+![The spring lab: four presets racing, their response plotted in cells, a button growing into a panel, a tab indicator travelling, rows reordering](docs/images/ui-motion.png)
+
+### Components
+
+![Navigation and containers: bar, tabs, sidebar, menu, launcher, panel, cards, dialog, accordion](docs/images/ui-navigation-containers.png)
+
+![Feedback and data: toasts, banners, progress cells, spinner, skeleton, stat tiles, bar chart, calendar, timeline](docs/images/ui-feedback-data.png)
+
+### In a real app
+
+[Pixelscale](https://github.com/maxmaster55/pixelscale), a Tailscale panel in GTK 4, uses the GTK stylesheet from the kit.
+
+![Pixelscale's four tabs: devices, exit node, Taildrop and settings](docs/images/pixelscale.png)
+
 ```sh
 python3 tools/check.py path/to/your/ui      # did I apply it correctly?
 python3 tools/build_single.py               # one self-contained HTML catalogue in dist/
 ```
-
-Built with the kit: [Pixelscale](https://github.com/maxmaster55/pixelscale), a Tailscale panel in GTK 4.
 
 ## What's in here
 
