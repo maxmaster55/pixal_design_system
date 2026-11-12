@@ -1,8 +1,8 @@
 {
   "name": "glowgrid-theme",
   "displayName": "Glowgrid",
-  "description": "Glowgrid for VS Code: colour themes (Ember, Forge, Frost) plus the look and feel around them: square corners, hard shadows, pixel labels and stepped motion.",
-  "version": "1.2.0",
+  "description": "Glowgrid for VS Code: colour themes (Ember, Forge, Frost, Geode) plus the look and feel around them: square corners, hard shadows, pixel labels and stepped motion.",
+  "version": "1.3.0",
   "publisher": "maxmaster",
   "license": "MIT",
   "engines": {
@@ -33,6 +33,11 @@
         "label": "Glowgrid Frost",
         "uiTheme": "vs-dark",
         "path": "./themes/glowgrid-frost-color-theme.json"
+      },
+      {
+        "label": "Glowgrid Geode",
+        "uiTheme": "vs-dark",
+        "path": "./themes/glowgrid-geode-color-theme.json"
       }
     ],
     "commands": [
@@ -83,7 +88,7 @@
         "glowgrid.followDesktopTheme": {
           "type": "boolean",
           "default": true,
-          "description": "On a Glowgrid desktop, switch between the Ember, Forge and Frost colour themes when the desktop theme changes. Has no effect while a non-Glowgrid colour theme is selected."
+          "description": "On a Glowgrid desktop, switch between the Ember, Forge, Frost and Geode colour themes when the desktop theme changes. Has no effect while a non-Glowgrid colour theme is selected."
         }
       }
     },

@@ -17,9 +17,9 @@ const START = "/* glowgrid-ui:start */";
 const END = "/* glowgrid-ui:end */";
 const CSS_KEY = "vs/workbench/workbench.desktop.main.css";
 // ---- following the desktop theme ----
-// A Glowgrid desktop keeps its theme name ("ember", "forge" or "frost") in this file and
+// A Glowgrid desktop keeps its theme name ("ember", "forge", "frost" or "geode") in this file and
 // rewrites it when the theme changes (the `glowgrid-theme` command).
-const THEMES = { ember: "Glowgrid Ember", forge: "Glowgrid Forge", frost: "Glowgrid Frost" };
+const THEMES = { ember: "Glowgrid Ember", forge: "Glowgrid Forge", frost: "Glowgrid Frost", geode: "Glowgrid Geode" };
 
 function desktopThemeFile() {
   const state = process.env.XDG_STATE_HOME && path.isAbsolute(process.env.XDG_STATE_HOME)

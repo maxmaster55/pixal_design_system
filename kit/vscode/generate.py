@@ -89,6 +89,22 @@ THEMES = {
             "brightCyan": "#e6fbff", "brightWhite": "#ffffff",
         },
     },
+    "geode": {
+        "label": "Glowgrid Geode",
+        "accent": "#9b7bff", "hot": "#d9ccff", "deep": "#4f35c2",
+        "glow1": "#b9a6ff", "glow2": "#efe9ff", "glow3": "#ffd36b",
+        "alert": "#ff6b8e",
+        "string": "#ffb38f",    # warm against the violet keywords
+        "type": "#7ca8ff",      # terminal blue (glow-2 would read as body text)
+        "typeSoft": "#a8c4ff",
+        "term": {
+            "black": "#170d24", "red": "#ff6b8e", "green": "#8fe3c0", "yellow": "#ffd36b",
+            "blue": "#7ca8ff", "magenta": "#9b7bff", "cyan": "#8fe3f7", "white": "#e9def0",
+            "brightBlack": "#5a3d52", "brightRed": "#ff97af", "brightGreen": "#b6f0d8",
+            "brightYellow": "#ffe49c", "brightBlue": "#a8c4ff", "brightMagenta": "#b9a6ff",
+            "brightCyan": "#bdf0ff", "brightWhite": "#ffffff",
+        },
+    },
 }
 
 COLORS = {
