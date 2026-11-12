@@ -1,5 +1,6 @@
-// Glowgrid for VS Code. The colour themes need no code; this file is for the look-and-feel
-// commands, which add ui.css to VS Code's own workbench stylesheet.
+// Glowgrid for VS Code. Two jobs: follow the desktop's theme (on a Glowgrid desktop the colour
+// theme changes with `glowgrid-theme`), and the look-and-feel commands, which add ui.css to
+// VS Code's own workbench stylesheet.
 //
 // VS Code has no supported way for an extension to restyle its window, so this edits a file
 // in the VS Code installation and updates the checksum VS Code keeps for it. That means:
@@ -15,6 +16,56 @@ const crypto = require("crypto");
 const START = "/* glowgrid-ui:start */";
 const END = "/* glowgrid-ui:end */";
 const CSS_KEY = "vs/workbench/workbench.desktop.main.css";
+// ---- following the desktop theme ----
+// A Glowgrid desktop keeps its theme name ("ember", "forge" or "frost") in this file and
+// rewrites it when the theme changes (the `glowgrid-theme` command).
+const THEMES = { ember: "Glowgrid Ember", forge: "Glowgrid Forge", frost: "Glowgrid Frost" };
+
+function desktopThemeFile() {
+  const state = process.env.XDG_STATE_HOME && path.isAbsolute(process.env.XDG_STATE_HOME)
+    ? process.env.XDG_STATE_HOME : path.join(require("os").homedir(), ".local", "state");
+  return path.join(state, "glowgrid", "theme");
+}
+
+/** The colour theme label for the desktop's current theme, or undefined if there is none. */
+function desktopTheme(file) {
+  try { return THEMES[fs.readFileSync(file, "utf8").trim()]; } catch (e) { return undefined; }
+}
+
+/** Decide whether to switch: only when following is on, the desktop names a theme, VS Code
+    is not already on it, and the user has not picked a non-Glowgrid theme themselves. */
+function themeToApply(current, wanted, follow) {
+  if (!follow || !wanted || current === wanted) return undefined;
+  const ours = Object.values(THEMES);
+  return current === undefined || ours.includes(current) ? wanted : undefined;
+}
+
+function followDesktopTheme(context) {
+  const file = desktopThemeFile();
+  const apply = () => {
+    const cfg = vscode.workspace.getConfiguration();
+    const next = themeToApply(cfg.get("workbench.colorTheme"), desktopTheme(file), cfg.get("glowgrid.followDesktopTheme", true));
+    if (next) cfg.update("workbench.colorTheme", next, vscode.ConfigurationTarget.Global);
+  };
+  apply();
+  // Watch the folder, not the file: the file is replaced on each change, which would end a
+  // watch on the file itself. If the folder does not exist this is not a Glowgrid desktop.
+  let timer;
+  try {
+    const watcher = fs.watch(path.dirname(file), (_event, name) => {
+      if (name && name !== path.basename(file)) return;
+      clearTimeout(timer);
+      timer = setTimeout(apply, 150); // let the write finish
+    });
+    context.subscriptions.push({ dispose: () => { clearTimeout(timer); watcher.close(); } });
+  } catch (e) {
+    // no desktop theme folder: nothing to follow
+  }
+  context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+    if (e.affectsConfiguration("glowgrid.followDesktopTheme")) apply();
+  }));
+}
+
 const BLOCKS = { corners: "squareCorners", shadows: "hardShadows", font: "interfaceFont", labels: "pixelLabels", motion: "steppedMotion" };
 
 function paths() {
@@ -85,6 +136,7 @@ async function write(context, on) {
 }
 
 function activate(context) {
+  followDesktopTheme(context);
   context.subscriptions.push(
     vscode.commands.registerCommand("glowgrid.applyUi", () => write(context, true)),
     vscode.commands.registerCommand("glowgrid.removeUi", () => write(context, false)),
@@ -108,4 +160,4 @@ function activate(context) {
   }
 }
 
-module.exports = { activate, deactivate() {}, _test: { strip, START, END } };
+module.exports = { activate, deactivate() {}, _test: { strip, START, END, themeToApply, desktopTheme, THEMES } };

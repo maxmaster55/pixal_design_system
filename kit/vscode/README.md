@@ -7,10 +7,14 @@ Colour themes and the look and feel around them, in the
 
 1. **Colour themes**: Glowgrid Ember, Forge and Frost. Ember becomes the default theme when
    the extension is installed; change it with `Ctrl+K Ctrl+T`.
-2. **Defaults** for things a theme cannot set: a block cursor that blinks instead of fading,
+2. **Follows the desktop.** On a Glowgrid desktop, running `glowgrid-theme forge` (or ember,
+   frost) switches VS Code's colour theme too, in every open window. It reads
+   `~/.local/state/glowgrid/theme`. Turn it off with `glowgrid.followDesktopTheme`; it also
+   stays out of the way if you pick a non-Glowgrid colour theme.
+3. **Defaults** for things a theme cannot set: a block cursor that blinks instead of fading,
    no smooth scrolling or smooth caret, square selections, no ligatures, and VT323 in the
    integrated terminal. These are defaults only; anything you set yourself wins.
-3. **UI style** (`ui.css`): square corners everywhere, hard offset shadows on menus and
+4. **UI style** (`ui.css`): square corners everywhere, hard offset shadows on menus and
    popups, IBM Plex Sans for the interface, Silkscreen section titles, VT323 in the status
    bar, and stepped hover changes.
 
