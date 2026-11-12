@@ -1,0 +1,65 @@
+/* Glowgrid look and feel for the VS Code window itself: the parts a colour theme cannot reach.
+   Appended to VS Code's workbench stylesheet, either at build time (Nix: see home.nix) or by
+   the command "Glowgrid: Apply UI Style". Each block between @name and @end can be switched
+   off in settings (glowgrid.ui.*). Colours stay with the colour theme; this file sets shape,
+   type and motion only. */
+
+/*@corners*/
+/* square everything: tabs, buttons, inputs, badges, scrollbars, menus, the command centre */
+.monaco-workbench *, .monaco-workbench *::before, .monaco-workbench *::after,
+.monaco-menu-container *, .context-view *, .monaco-dialog-box, .monaco-dialog-box * { border-radius: 0 !important; }
+/*@end*/
+
+/*@shadows*/
+/* floating things cast a hard offset shadow; nothing has a soft one */
+.monaco-workbench .quick-input-widget,
+.monaco-workbench .monaco-menu-container,
+.monaco-menu-container .monaco-menu,
+.context-view .monaco-menu,
+.monaco-workbench .monaco-hover,
+.monaco-workbench .monaco-editor .suggest-widget,
+.monaco-workbench .monaco-editor .suggest-details,
+.monaco-workbench .monaco-editor .parameter-hints-widget,
+.monaco-workbench .monaco-editor .find-widget,
+.monaco-workbench .monaco-editor .rename-box,
+.monaco-workbench .monaco-editor .peekview-widget,
+.monaco-workbench .notification-toast,
+.monaco-workbench .notifications-center,
+.monaco-workbench .monaco-select-box-dropdown-container,
+.monaco-dialog-box { box-shadow: 6px 6px 0 #000000 !important; }
+.monaco-workbench .monaco-scrollable-element > .shadow,
+.monaco-workbench .monaco-editor .scroll-decoration,
+.monaco-workbench .tabs-container > .tab.active::before { box-shadow: none !important; }
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab { box-shadow: none !important; }
+/*@end*/
+
+/*@font*/
+/* running text: IBM Plex Sans across the workbench */
+.monaco-workbench, .monaco-workbench.linux, .monaco-workbench.mac, .monaco-workbench.windows,
+.monaco-menu-container, .context-view, .monaco-dialog-box { font-family: "IBM Plex Sans", "Noto Sans", system-ui, sans-serif !important; }
+/*@end*/
+
+/*@labels*/
+/* labels: Silkscreen, upper case, spaced, for section titles (never icon buttons, which
+   are drawn with an icon font) */
+.monaco-workbench .part > .title > .title-label h2,
+.monaco-workbench .part > .composite.title h2,
+.monaco-workbench .pane-header .title,
+.monaco-workbench .panel .composite.title .action-label:not(.codicon),
+.monaco-workbench .part.panel > .title .action-label:not(.codicon),
+.monaco-workbench .part.auxiliarybar > .title .action-label:not(.codicon),
+.monaco-workbench .part.sidebar > .title .action-label:not(.codicon) {
+  font-family: "Silkscreen", "Pixelify Sans", monospace !important; font-size: 10.5px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; font-weight: 400 !important; }
+/* values: the status bar is numbers and names of things, so VT323 */
+.monaco-workbench .part.statusbar, .monaco-workbench .part.statusbar .statusbar-item,
+.monaco-workbench .part.statusbar .statusbar-item a { font-family: "VT323", "Courier New", monospace !important; font-size: 17px !important; letter-spacing: 0 !important; }
+.monaco-workbench .monaco-count-badge, .monaco-workbench .badge-content { font-family: "VT323", monospace !important; font-size: 15px !important; }
+/*@end*/
+
+/*@motion*/
+/* state changes happen in two held steps, not a smooth fade */
+.monaco-workbench .monaco-button, .monaco-workbench .action-item, .monaco-workbench .action-label,
+.monaco-workbench .tab, .monaco-workbench .monaco-list-row, .monaco-workbench .monaco-inputbox,
+.monaco-workbench .monaco-custom-toggle, .monaco-workbench .statusbar-item { transition-duration: 80ms !important; transition-timing-function: steps(2) !important; }
+.monaco-workbench .monaco-progress-container .progress-bit { animation-timing-function: steps(12) !important; }
+/*@end*/

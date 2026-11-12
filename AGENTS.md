@@ -11,7 +11,9 @@ Read it top to bottom once; it is short on purpose. Deeper references are linked
 - **Four fonts with fixed jobs:** Silkscreen (labels, upper case, spaced), VT323 (numbers and
   values), IBM Plex Sans (anything read as a sentence), Pixelify Sans (one headline per surface).
 - **1 px stone outlines at rest; 2 px accent on hover, selection and the focused thing.**
-- **Motion in held steps:** 80 ms for presses, 120 ms for toggles, 180 ms for things entering.
+- **Motion is part of the look.** Things that travel ride springs and are drawn on the 2 px
+  grid (whole-pixel hops, with overshoot); colour and opacity change in held steps (80 ms
+  presses, 120 ms toggles). Read `MOTION.md` before animating anything.
 - Themes change only the lights: **Ember** (default), **Forge**, **Frost**, **Geode**.
 
 ## 2. Pick your target and copy
@@ -20,7 +22,7 @@ Do not retype colours or invent components. Copy the kit file for your platform.
 
 | You are building | Copy | Then |
 | --- | --- | --- |
-| A web page or web app | `kit/web/tokens.css`, `kit/web/glowgrid-ui.css`, optionally `glowgrid-ui.js` and `icons.js` | Put class `gg` on `<body>`; copy markup from `kit/web/demo.html` |
+| A web page or web app | `kit/web/tokens.css`, `kit/web/glowgrid-ui.css`, `glowgrid-ui.js`, `icons.js`; for springs `vendor/weave.js` + `glowgrid-motion.js` | Put class `gg` on `<body>`; copy markup from `kit/web/demo.html` |
 | A GTK 4 app | `kit/gtk4/tokens-<theme>.css` + `kit/gtk4/glowgrid.css` | Add class `glowgrid` to the window; use the class names in the file's header. Working example: github.com/maxmaster55/pixelscale |
 | Qt Quick / Quickshell | everything in `kit/qml/` | `Glowgrid.name = "frost"` switches theme |
 | A Rust program | `kit/rust/tokens.rs` | `palette("ember")` |
@@ -28,7 +30,8 @@ Do not retype colours or invent components. Copy the kit file for your platform.
 | The Linux console | `kit/terminal/console-<theme>.txt` (16 hex colours) | |
 | niri | `kit/desktop/niri.kdl` | |
 | Noctalia shell | `kit/noctalia/glowgrid-<theme>.json` into `~/.config/noctalia/palettes/` | `source = "custom"`, `corner_radius_scale = 0` |
-| VS Code | `kit/vscode/` (an extension folder) | |
+| VS Code | `kit/vscode/` (an extension: themes, defaults, and `ui.css` for shape, fonts and shadows) | Read its README: the UI style is applied by a command, or at build time on NixOS |
+| Neovim | `kit/neovim/` (`colors/glowgrid.lua` and an `init.lua` with a bar-style status line) | `:colorscheme glowgrid` |
 | A cursor theme | `kit/cursor/` | `python3 build.py` |
 | Icons | `kit/icons/icons.json` (32 icons, 7×7 bits) | `python3 tools/icons.py export DIR` for SVGs |
 | Anything else | `tokens.json` | Follow section 3 |

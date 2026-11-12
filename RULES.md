@@ -89,6 +89,9 @@ Test: if a glowing glyph stops reading as pixels, the glow is too strong.
 
 ## 6. Motion
 
+> The full motion system (springs on the pixel grid, shared elements, container transforms,
+> stepped effects) is in [`MOTION.md`](MOTION.md). The cadence rules below are for art.
+
 - **Cadence:** 12 fps with held frames. Step time as floor(elapsed / (1000/12)) and redraw only on a new step; in CSS use `steps()`. Move in whole art pixels, never tween between them.
 - **Sparks rise** 1.8 to 4.8 art px/s, looping, with a ±1 px sideways wobble on a 4.8 s sine. **Flicker** with smooth noise at about 6 Hz; below 0.25 show the dim color for that frame.
 - **Focal pulse:** halo 80 to 120 percent on a 3.9 s sine; highlight pixels wink off one at a time every 0.25 s. **Sparkles** orbit at 0.25 rad/s.

@@ -352,3 +352,9 @@ select.gg-input { appearance: none; padding-right: 30px; cursor: pointer;
 .gg-login { display: inline-flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); box-shadow: 0 0 0 2px var(--stone), var(--shadow-lg) var(--shadow-lg) 0 var(--black); }
 .gg-login .gg-pins { display: flex; gap: 6px; } .gg-login .gg-pins i { width: 10px; height: 10px; background: var(--stone); } .gg-login .gg-pins i.set { background: var(--accent); }
 .gg-bigclock { font-family: var(--display); font-weight: 700; font-size: clamp(64px, 14vw, 128px); line-height: .85; color: var(--accent-hot); text-shadow: 8px 8px 0 var(--title-shadow); }
+
+/* ---------- hooks for glowgrid-motion.js ---------- */
+/* a switch whose thumb is driven by a spring: the CSS thumb steps aside */
+.gg-switch.gg-sprung i::after { display: none; }
+/* a tab strip with a travelling indicator: the per-tab bar steps aside */
+.gg-tabs.gg-has-indicator .gg-tab, .gg-tabs.gg-has-indicator .gg-tab[aria-selected="true"], .gg-tabs.gg-has-indicator .gg-tab.active { border-top-color: transparent; }

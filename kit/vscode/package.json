@@ -1,15 +1,16 @@
 {
   "name": "glowgrid-theme",
   "displayName": "Glowgrid",
-  "description": "Glowgrid colour themes: a dark world lit from within. Ember, Forge and Frost.",
-  "version": "1.0.0",
+  "description": "Glowgrid for VS Code: colour themes (Ember, Forge, Frost) plus the look and feel around them: square corners, hard shadows, pixel labels and stepped motion.",
+  "version": "1.2.0",
   "publisher": "maxmaster",
   "license": "MIT",
   "engines": {
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Themes"
+    "Themes",
+    "Other"
   ],
   "keywords": [
     "glowgrid",
@@ -33,6 +34,82 @@
         "uiTheme": "vs-dark",
         "path": "./themes/glowgrid-frost-color-theme.json"
       }
-    ]
-  }
+    ],
+    "commands": [
+      {
+        "command": "glowgrid.applyUi",
+        "title": "Apply UI Style",
+        "category": "Glowgrid"
+      },
+      {
+        "command": "glowgrid.removeUi",
+        "title": "Remove UI Style",
+        "category": "Glowgrid"
+      },
+      {
+        "command": "glowgrid.uiStatus",
+        "title": "Show UI Style Status",
+        "category": "Glowgrid"
+      }
+    ],
+    "configuration": {
+      "title": "Glowgrid",
+      "properties": {
+        "glowgrid.ui.squareCorners": {
+          "type": "boolean",
+          "default": true,
+          "description": "Square every corner: tabs, buttons, inputs, badges, menus, scrollbars."
+        },
+        "glowgrid.ui.hardShadows": {
+          "type": "boolean",
+          "default": true,
+          "description": "Give floating things (menus, the command palette, hovers, notifications) a hard offset shadow instead of a soft one."
+        },
+        "glowgrid.ui.interfaceFont": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use IBM Plex Sans for the interface."
+        },
+        "glowgrid.ui.pixelLabels": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use Silkscreen for section titles and VT323 for the status bar and badges."
+        },
+        "glowgrid.ui.steppedMotion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Change hover and selection states in two held steps instead of a smooth fade."
+        },
+        "glowgrid.followDesktopTheme": {
+          "type": "boolean",
+          "default": true,
+          "description": "On a Glowgrid desktop, switch between the Ember, Forge and Frost colour themes when the desktop theme changes. Has no effect while a non-Glowgrid colour theme is selected."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "workbench.colorTheme": "Glowgrid Ember",
+      "editor.cursorStyle": "block",
+      "editor.cursorBlinking": "blink",
+      "editor.cursorSmoothCaretAnimation": "off",
+      "editor.smoothScrolling": false,
+      "editor.roundedSelection": false,
+      "editor.fontLigatures": false,
+      "editor.minimap.renderCharacters": false,
+      "editor.guides.bracketPairs": "active",
+      "editor.bracketPairColorization.enabled": true,
+      "workbench.list.smoothScrolling": false,
+      "workbench.tree.renderIndentGuides": "always",
+      "terminal.integrated.smoothScrolling": false,
+      "terminal.integrated.cursorStyle": "block",
+      "terminal.integrated.cursorBlinking": true,
+      "terminal.integrated.fontFamily": "VT323, 'JetBrainsMono Nerd Font', monospace",
+      "terminal.integrated.fontSize": 17,
+      "terminal.integrated.fontLigatures.enabled": false
+    }
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ]
 }

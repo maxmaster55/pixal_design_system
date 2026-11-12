@@ -4,7 +4,8 @@ Every component in the system, what it is for, its states, and how it moves. The
 (`kit/web`) implements all of them; the GTK and QML columns say what exists there today.
 
 See them live: open [`kit/web/demo.html`](kit/web/demo.html), or build one shareable file with
-`python3 tools/build_single.py`. Motion names refer to [`MOTION.md`](MOTION.md).
+`python3 tools/build_single.py`. Motion names refer to [`MOTION.md`](MOTION.md): spatial movement uses springs drawn on the
+pixel grid, effects use held steps.
 
 **Reading the tables.** *Class* is the web class; the markup to copy is in `demo.html`.
 *Motion* names the primitive and when it plays. GTK: ● styled in `kit/gtk4/glowgrid.css`,
@@ -22,7 +23,8 @@ component file in `kit/qml`, or blank.
    as a sentence, Pixelify Sans for one headline per surface.
 6. Resting outline is 1 px stone; hover, selection and focus are 2 px accent. Keyboard focus
    is a 2 px glow-3 outline.
-7. Motion is stepped (`steps(n)`), short, and settles. Nothing eases smoothly.
+7. Motion is primary. Position and size ride springs and are drawn on the 2 px grid; colour
+   and opacity change in held steps. Nothing eases smoothly, and everything settles.
 
 ## Actions
 
@@ -41,7 +43,7 @@ component file in `kit/qml`, or blank.
 | Launcher input | `gg-input value` | as text field | block cursor blinks at 1 Hz | | |
 | Text area | `textarea.gg-input` | as text field | as text field | ○ | |
 | Select | `select.gg-input` | closed, open | its menu drops | ○ dropdown | |
-| Switch | `gg-switch` (+ `power`) | off, on, disabled | thumb moves in 3 held steps over 120 ms (toggle) | ○ switch, `switch.power` | `GgSwitch` |
+| Switch | `gg-switch` (+ `power`) | off, on, disabled | the thumb travels on the fast spring and overshoots its stop (3 held steps without the script); the track colour steps | ○ switch, `switch.power` | `GgSwitch` |
 | Checkbox / radio | `gg-check` | off, on | mark appears in one step | ○ | |
 | Slider | `gg-range` | rest, dragging | thumb follows the pointer; no easing | ○ scale | |
 | Stepper | `gg-stepper` | value, at limit | the value flashes on each change | | |
@@ -55,7 +57,7 @@ component file in `kit/qml`, or blank.
 | Bar | `gg-bar` | | none; its contents animate | | reference: nixos_conf `Bar.qml` |
 | Workspace cells | `gg-cells-ws` | empty, occupied, active | the active cell is lit with a square halo; changes in one step | | |
 | Clock | `gg-clock` | | changes on the minute, no animation | | |
-| Tabs | `gg-tabs` / `gg-tab` | rest, hover, selected | the new page slides in (slide, 180 ms); the 3 px accent bar steps on | ● `.tabs`, `button.tab` | |
+| Tabs | `gg-tabs` / `gg-tab` | rest, hover, selected | shared element: one accent bar travels between tabs on the fast spring (`data-gg-indicator`); the new page slides in | ● `.tabs`, `button.tab` | |
 | Sidebar | `gg-nav` | rest, hover, current | a 3 px accent rail steps in on the current item | | |
 | Breadcrumbs | `gg-crumbs` | | none | | |
 | Pagination | `gg-pager` | rest, hover, current | colour steps (press) | | |
@@ -70,10 +72,10 @@ component file in `kit/qml`, or blank.
 | --- | --- | --- | --- | --- | --- |
 | Panel | `gg-panel` (+ `lit` / `framed`) with `gg-head`, `gg-body`, `gg-foot` | | drops from a bar, or assembles | ● `.panel`, `.head`, `.page`, `.foot` | `GgPanel` |
 | Card | `gg-card` (+ `interactive`) | rest, hover, pressed | interactive: lifts 2 px and gains the accent outline; sinks 4 px on press | | `GgPanel` |
-| Row | `gg-row` (+ `selected`) | rest, hover, selected | outline steps to 2 px accent (press); lists use rise on entry | ● `.row`, `.row.me` | |
+| Row | `gg-row` (+ `selected`) | rest, hover, selected | outline steps to 2 px accent (press); lists enter on the default spring, 30 ms apart; reordering travels (`ggReorder`) | ● `.row`, `.row.me` | |
 | Group heading | `gg-group` | | rises with its list | ● `.group` | `GgLabel` |
 | Window frame | `gg-window` (+ `focused`) | focused, unfocused | assembles on open, disassembles on close (280 / 220 ms) | reference: `kit/desktop/niri.kdl` | |
-| Dialog | `gg-scrim` + `gg-dialog` | closed, open | the dialog assembles; the scrim (a 2 px dither, never a blur) appears in one step | | |
+| Dialog | `gg-scrim` + `gg-dialog` | closed, open | container transform from the control that opened it (expressive spring), or cell assembly; the scrim (a 2 px dither, never a blur) appears in one step | | |
 | Drawer | `gg-drawer` | closed, open | slides in from the edge; its rows rise | | |
 | Accordion | `details.gg-accordion` | closed, open | the marker cell lights (toggle); content rises | | |
 | Tooltip | `gg-tooltip[data-tip]` | hidden, shown | appears in 2 steps | ○ tooltip | |
@@ -99,7 +101,7 @@ component file in `kit/qml`, or blank.
 
 | Component | Class | States | Motion | GTK | QML |
 | --- | --- | --- | --- | --- | --- |
-| Stat tile | `gg-stat` | | the value counts up in 10 held steps, then flashes | | `GgPanel` + `GgValue` |
+| Stat tile | `gg-stat` | | the value rides a spring to its new number (`ggTicker`), or counts up in 10 held steps, then flashes | | `GgPanel` + `GgValue` |
 | Key and value | `dl.gg-kv` | | a changed value flashes | | `GgLabel` + `GgValue` |
 | Bar chart | `gg-bars` | | columns grow from the baseline in 8 steps, 30 ms apart | | |
 | Meter | `gg-meter` | | columns change in whole steps | | `GgCells { rising: true }` |
